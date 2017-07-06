@@ -1,0 +1,8 @@
+*.pickle
+*.html
+*.txt
+*.pyc
+*.pdf
+*.zip
+*.jpg
+merge_dup.py

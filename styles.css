@@ -1,0 +1,42 @@
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+td, tr, img, table, tbody {
+    margin: 0;
+    padding: 0;
+}
+
+td {
+    font-size: 14pt;
+}
+
+/*div {
+    width: 288px;
+    height: 242px;
+    overflow: hidden;
+    position: relative;
+}
+
+img {
+    position: absolute;
+    top: -12px;
+    left: -12px;
+}
+
+div:hover {
+    overflow: visible;
+    z-index: 2;
+}
+*/
+/*img:hover {
+    top: 0;
+    left: 0;
+}*/
+
+img {
+    display: block;
+    width: 120px;
+    height: auto;
+}
