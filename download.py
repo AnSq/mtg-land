@@ -5,7 +5,7 @@ import urllib
 import os
 import multiprocessing
 
-save_path = "images_uncropped"
+save_path = "images"
 
 def main():
     pool = multiprocessing.Pool(32)

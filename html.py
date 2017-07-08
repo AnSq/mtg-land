@@ -2,6 +2,7 @@
 
 
 import os
+import cPickle as pickle
 
 import order
 
@@ -44,17 +45,20 @@ def main():
         for c in sets[s]:
             sets[s][c].sort()
 
+    with open("titles.pickle") as f:
+        titles = pickle.load(f)
+
     body = ""
 
     total = 0
 
     for set_code in set_order:
-        body += "<tr><td>%s</td>" % set_code
+        body += "<tr><td>{set_code} - {set_title}</td>".format(set_code=set_code, set_title=titles[set_code])
         for color in "WUBRG":
             for card_num in sets[set_code][color]:
-                fname = "images/%s_%s_%s.jpg" % (color, set_code, card_num)
-                alt = "%s %s %s" % (color, set_code, card_num)
-                body += '<td><div><img src="{fname}" title="{alt}" />{alt}</div></td>'.format(fname=fname, alt=alt)
+                card_code = "%s_%s_%s" % (color, set_code, card_num)
+                fname = "images/%s.jpg" % card_code
+                body += '<td><div><img src="{fname}" title="{alt}" />{alt}</div></td>'.format(fname=fname, card_code=card_code, alt=card_code.replace("_"," "))
                 total += 1
         body += "</tr>\n"
 

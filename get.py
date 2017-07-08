@@ -6,6 +6,8 @@ import cPickle as pickle
 import multiprocessing
 import sys
 
+import order
+
 
 def get_base():
     basics = ["plains", "island", "swamp", "mountain", "forest"]
@@ -82,17 +84,25 @@ def main():
             all_links.append(queue.get())
 
         color_images = []
+        set_codes = set()
         for link in all_links:
             sp = link.split("/")
             set_code = sp[3]
+            set_codes.add(set_code.upper())
             card_num = sp[5].replace(".html", "")
-            color_images.append("http://magiccards.info/scans/en/%s/%s.jpg" % (set_code, card_num))
+            color_images.append("http://magiccards.info/scans/en/{set_code}/{card_num}.jpg".format(set_code=set_code, card_num=card_num))
 
         images.append(color_images)
         print len(color_images)
         total += len(color_images)
 
     print "Total: %d" % total
+
+    diff = set_codes.difference(set(order.set_order))
+    if diff:
+        print "\nSets not in order:"
+        for s in diff:
+            print s
 
     with open("images.pickle", "w") as f:
         pickle.dump(images, f)

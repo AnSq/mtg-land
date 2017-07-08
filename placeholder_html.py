@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+import cPickle as pickle
 
 
 html_header = """\
@@ -42,14 +43,8 @@ def main():
             if line:
                 placeholders.append(line.strip())
 
-    titles = {}
-    with open("titles.txt") as f:
-        for line in f:
-            if line:
-                code, title = line.strip().split(" ", 1)
-                code = code.strip()
-                title = title.strip()
-                titles[code] = title
+    with open("titles.pickle") as f:
+        titles = pickle.load(f)
 
     types = {
         "W": "Plains",

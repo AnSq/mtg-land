@@ -2,23 +2,24 @@
 
 import sys
 import requests
+import cPickle as pickle
 from pyquery import PyQuery as pq
 
 import order
 
 
 def main():
-    titles = ""
-    for s in order.set_order:
-        r = requests.get("http://magiccards.info/%s/en.html" % s.lower())
+    titles = {}
+    for set_code in order.set_order:
+        r = requests.get("http://magiccards.info/%s/en.html" % set_code.lower())
         d = pq(r.text)
 
-        title = s.upper().ljust(8) + d("title")[0].text
-        titles += title + "\n"
-        print title
+        title = d("title")[0].text
+        print set_code.upper().ljust(8) + title
+        titles[set_code] = title
 
-    with open("titles.txt", "w") as f:
-        f.write(titles)
+    with open("titles.pickle", "w") as f:
+        pickle.dump(titles, f)
 
 
 if __name__ == "__main__":

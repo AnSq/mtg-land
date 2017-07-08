@@ -45,7 +45,7 @@ td {
     display: inline-block;
     font-size: 10pt;
     text-align: center;
-    padding-bottom: 0.5em;
+    padding: 2px 2px 0.5em;
 }
 
 td:first-child {

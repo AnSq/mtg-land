@@ -109,5 +109,5 @@ set_order = [
     'DDS',
     'AKH',
     'CMA',
-    'E01'
+    'E01',
 ]
