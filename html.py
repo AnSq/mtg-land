@@ -54,7 +54,7 @@ def main():
             for card_num in sets[set_code][color]:
                 fname = "images/%s_%s_%s.jpg" % (color, set_code, card_num)
                 alt = "%s %s %s" % (color, set_code, card_num)
-                body += '<td><div><img src="%s" title="%s" /></div></td>' % (fname, alt)
+                body += '<td><div><img src="{fname}" title="{alt}" />{alt}</div></td>'.format(fname=fname, alt=alt)
                 total += 1
         body += "</tr>\n"
 

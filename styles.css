@@ -1,3 +1,7 @@
+body {
+    font-family: "Trebuchet MS";
+}
+
 table {
     border-spacing: 0;
     border-collapse: collapse;
@@ -6,10 +10,6 @@ table {
 td, tr, img, table, tbody {
     margin: 0;
     padding: 0;
-}
-
-td {
-    font-size: 14pt;
 }
 
 /*div {
@@ -39,4 +39,24 @@ img {
     display: block;
     width: 120px;
     height: auto;
+}
+
+td {
+    display: inline-block;
+    font-size: 10pt;
+    text-align: center;
+    padding-bottom: 0.5em;
+}
+
+td:first-child {
+    display: block;
+    font-size: 18pt;
+    text-align: left;
+}
+
+tr {
+    display: block;
+    padding-bottom: 2em;
+    border-bottom: 3px solid black;
+    margin-bottom: 2em;
 }
