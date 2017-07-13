@@ -43,7 +43,7 @@ def main():
 
     for s in sets:
         for c in sets[s]:
-            sets[s][c].sort()
+            sets[s][c].sort(key=order.natural_order)
 
     with open("titles.pickle") as f:
         titles = pickle.load(f)

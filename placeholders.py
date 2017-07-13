@@ -38,7 +38,7 @@ def main():
     for c in "WUBRG":
         for s in order.set_order:
             if s in org[c]:
-                org[c][s] = sorted(org[c][s])
+                org[c][s] = sorted(org[c][s], key=order.natural_order)
 
                 placeholder = "%s %s %s" % (c, s, ",".join([i for i in org[c][s]]))
                 placeholders += placeholder + "\n"

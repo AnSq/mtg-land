@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+import re
+
+natural_order = lambda text: [(int(group) if group.isdigit() else group) for group in re.split("(\d+)", text)]
+
+
 set_order = [
     'AL',
     'BE',
