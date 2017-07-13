@@ -6,3 +6,4 @@
 *.zip
 *.jpg
 merge_dup.py
+!LICENSE.txt
