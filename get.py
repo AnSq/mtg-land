@@ -6,7 +6,7 @@ import cPickle as pickle
 import multiprocessing
 import sys
 
-import order
+import util
 
 
 def get_base():
@@ -98,9 +98,9 @@ def main():
 
     print "Total: %d" % total
 
-    diff = set_codes.difference(set(order.set_order))
+    diff = set_codes.difference(set(util.set_order))
     if diff:
-        print "\nSets not in order:"
+        print "\nSets not in set_order:"
         for s in diff:
             print s
 

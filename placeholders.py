@@ -3,7 +3,7 @@
 import cPickle as pickle
 import sys
 
-import order
+import util
 
 
 def main():
@@ -36,9 +36,9 @@ def main():
     total = 0;
 
     for c in "WUBRG":
-        for s in order.set_order:
+        for s in util.set_order:
             if s in org[c]:
-                org[c][s] = sorted(org[c][s], key=order.natural_order)
+                org[c][s] = sorted(org[c][s], key=util.natural_order)
 
                 placeholder = "%s %s %s" % (c, s, ",".join([i for i in org[c][s]]))
                 placeholders += placeholder + "\n"

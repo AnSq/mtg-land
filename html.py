@@ -4,7 +4,7 @@
 import os
 import cPickle as pickle
 
-import order
+import util
 
 
 html_header = """\
@@ -14,6 +14,7 @@ html_header = """\
         <meta charset="utf-8">
         <title>MTG Basic Land</title>
         <link href="styles.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css" />
         <!--<script src="script.js"></script>-->
     </head>
     <body>
@@ -29,7 +30,7 @@ html_footer = """
 </html>
 """
 
-set_order = list(reversed(order.set_order))
+set_order = list(reversed(util.set_order))
 
 
 def main():
@@ -43,7 +44,7 @@ def main():
 
     for s in sets:
         for c in sets[s]:
-            sets[s][c].sort(key=order.natural_order)
+            sets[s][c].sort(key=util.natural_order)
 
     with open("titles.pickle") as f:
         titles = pickle.load(f)
@@ -53,7 +54,12 @@ def main():
     total = 0
 
     for set_code in set_order:
-        body += "<tr><td>{set_code} - {set_title}</td>".format(set_code=set_code, set_title=titles[set_code])
+        body += '<tr><td><i class="ss ss-{set_symbol}"></i>  {set_code} - {set_title}</td>'.format(
+            set_symbol=util.set_symbol(set_code),
+            set_code=set_code,
+            set_title=titles[set_code]
+        )
+
         for color in "WUBRG":
             for card_num in sets[set_code][color]:
                 card_code = "%s_%s_%s" % (color, set_code, card_num)

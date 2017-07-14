@@ -5,12 +5,12 @@ import requests
 import cPickle as pickle
 from pyquery import PyQuery as pq
 
-import order
+import util
 
 
 def main():
     titles = {}
-    for set_code in order.set_order:
+    for set_code in util.set_order:
         r = requests.get("http://magiccards.info/%s/en.html" % set_code.lower())
         d = pq(r.text)
 

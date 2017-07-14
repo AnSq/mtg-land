@@ -5,6 +5,63 @@ import re
 natural_order = lambda text: [(int(group) if group.isdigit() else group) for group in re.split("(\d+)", text)]
 
 
+set_symbol_translation = {
+    "DDAGVL": "ddd",
+    "DDADVD": "ddc",
+    "DDAJVC": "dd2",
+    "DDAEVG": "evg",
+    "JR"    : "pmei",
+    "PTC"   : "dgm",
+    "PVC"   : "dde",
+    "PDS"   : "h09",
+    "GVL"   : "ddd",
+    "PCH"   : "hop",
+    "DVD"   : "ddc",
+    "JVC"   : "dd2",
+    "LW"    : "lrw",
+    "TS"    : "tsp",
+    "CSTD"  : "ice",
+    "9E"    : "9ed",
+    "UH"    : "unh",
+    "MI"    : "mrd",
+    "8E"    : "8ed",
+    "ON"    : "ons",
+    "DM"    : "dkm",
+    "OD"    : "ody",
+    "7E"    : "7ed",
+    "BD"    : "btd",
+    "IN"    : "inv",
+    "EURO"  : "peuro",
+    "BR"    : "brb",
+    "MM"    : "mmq",
+    "ST"    : "s99",
+    "P3K"   : "ptk",
+    "6E"    : "6ed",
+    "GURU"  : "pgru",
+    "AT"    : "ath",
+    "US"    : "usg",
+    "UG"    : "ugl",
+    "APAC"  : "papac",
+    "TP"    : "tmp",
+    "PO"    : "por",
+    "5E"    : "5ed",
+    "MR"    : "mir",
+    "ARENA" : "parl2",
+    "ITP"   : "x2ps",
+    "IA"    : "ice",
+    "4E"    : "4ed",
+    "RV"    : "3ed",
+    "CEDI"  : "xice",
+    "CED"   : "xcle",
+    "AN"    : "arn",
+    "UN"    : "2ed",
+    "BE"    : "leb",
+    "AL"    : "lea"
+}
+
+set_symbol = lambda set_code: set_symbol_translation[set_code] if set_code in set_symbol_translation else set_code.lower()
+
+
 set_order = [
     'AL',
     'BE',
