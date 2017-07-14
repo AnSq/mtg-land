@@ -48,7 +48,7 @@ td {
     padding: 2px 2px 0.5em;
 }
 
-td:first-child {
+.set_title {
     display: block;
     font-size: 18pt;
     text-align: left;
@@ -56,7 +56,34 @@ td:first-child {
 
 tr {
     display: block;
-    padding-bottom: 2em;
+    padding-bottom: 20px;
     border-bottom: 3px solid black;
-    margin-bottom: 2em;
+    margin-bottom: 20px;
+}
+
+.set {
+    font-size: 0;
+}
+
+.card {
+    position: relative;
+}
+
+.card input {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.card input:checked + label > img {
+    opacity: 0.5;
+}
+.card input:checked + label::after {
+    content: "✓";
+    font-size: 60pt;
+    color: green;
+    position: absolute;
+    bottom: 5%;
+    left: 55%;
+    margin-left: -25%;
 }

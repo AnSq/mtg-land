@@ -18,14 +18,29 @@ html_header = """\
         <!--<script src="script.js"></script>-->
     </head>
     <body>
-        <table>
-            <tbody>
+        <form name="form" id="form">
+            <table><tbody>
+                <tr>
+                    <input type="reset">
+                </tr>
 """
 
+set_title_html = """\
+                <tr class="set">
+                    <td class="set_title"><i class="ss ss-{set_symbol}"></i> {set_code} - {set_title}</td>
+"""
+
+card_html = """\
+                    <td><div class="card">
+                        <input type="checkbox" id="{card_code}" name="{card_code}">
+                        <label for="{card_code}"><img src="{fname}" title="{alt}" /></label>
+                        {alt}
+                    </div></td>
+"""
 
 html_footer = """
-            </tbody>
-        </table>
+            </tbody></table>
+        </form>
     </body>
 </html>
 """
@@ -54,7 +69,7 @@ def main():
     total = 0
 
     for set_code in set_order:
-        body += '<tr><td><i class="ss ss-{set_symbol}"></i>  {set_code} - {set_title}</td>'.format(
+        body += set_title_html.format(
             set_symbol=util.set_symbol(set_code),
             set_code=set_code,
             set_title=titles[set_code]
@@ -64,9 +79,9 @@ def main():
             for card_num in sets[set_code][color]:
                 card_code = "%s_%s_%s" % (color, set_code, card_num)
                 fname = "images/%s.jpg" % card_code
-                body += '<td><div><img src="{fname}" title="{alt}" />{alt}</div></td>'.format(fname=fname, card_code=card_code, alt=card_code.replace("_"," "))
+                body += card_html.format(fname=fname, card_code=card_code, alt=card_code.replace("_"," "))
                 total += 1
-        body += "</tr>\n"
+        body += "\t\t\t\t</tr>\n"
 
     html = html_header + body + html_footer
 
