@@ -15,18 +15,20 @@ html_header = """\
         <title>MTG Basic Land</title>
         <link href="styles.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css" />
-        <!--<script src="script.js"></script>-->
+        <script src="script.js"></script>
     </head>
     <body>
         <form name="form" id="form">
             <table><tbody>
                 <tr>
+                    <input type="button" id="save" name="save" value="Save">
+                    <input type="file" id="load" name="load" accept=".json">
                     <input type="reset">
                 </tr>
 """
 
 set_title_html = """\
-                <tr class="set">
+                <tr class="set" id="{set_code}" data-title="{set_title}">
                     <td class="set_title"><i class="ss ss-{set_symbol}"></i> {set_code} - {set_title}</td>
 """
 
