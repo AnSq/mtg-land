@@ -7,7 +7,7 @@ import cPickle as pickle
 import util
 
 
-html_header = """\
+header_html = """\
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,30 +20,32 @@ html_header = """\
     <body>
         <h1>MTG Basic Land</h1>
         <form name="form" id="form">
-            <table><tbody>
-                <tr>
-                    <input type="button" id="save" name="save" value="Save">
-                    <input type="file" id="load" name="load" accept=".json">
-                    <input type="reset" id="reset">
-                    <span id="count"><span id="checked">?</span> / <span id="total">?</span></span>
-                </tr>
+            <div id="buttons">
+                <input type="button" id="save" name="save" value="Save">
+                <input type="file" id="load" name="load" accept=".json">
+                <input type="reset" id="reset">
+                <span id="count"><span id="checked">?</span> / <span id="total">?</span></span>
+            </div>
 """
 
 set_title_html = """\
-                <tr class="set" id="{set_code}" data-title="{set_title}">
-                    <td class="set_title"><i class="ss ss-{set_symbol}"></i> {set_code} - {set_title}</td>
+            <div class="set" id="{set_code}" data-title="{set_title}">
+                <h2 class="set_title"><i class="ss ss-{set_symbol}"></i> {set_code} - {set_title}</h2>
 """
 
 card_html = """\
-                    <td><div class="card color_{color}">
-                        <input type="checkbox" id="{card_code}" name="{card_code}" class="cardcheck">
-                        <label for="{card_code}"><img src="{fname}" title="{alt}" /></label>
-                        {alt}
-                    </div></td>
+                <div class="card color_{color}">
+                    <input type="checkbox" id="{card_code}" name="{card_code}" class="cardcheck">
+                    <label for="{card_code}"><img src="{fname}" title="{alt}" /></label>
+                    {alt}
+                </div>
 """
 
-html_footer = """
-            </tbody></table>
+set_end_html = """\
+            </div>
+"""
+
+footer_html = """
         </form>
     </body>
 </html>
@@ -85,9 +87,9 @@ def main():
                 fname = "images/%s.jpg" % card_code
                 body += card_html.format(fname=fname, card_code=card_code, alt=card_code.replace("_"," "), color=color.lower())
                 total += 1
-        body += "\t\t\t\t</tr>\n"
+        body += set_end_html
 
-    html = html_header + body + html_footer
+    html = header_html + body + footer_html
 
     with open("land.html", "w") as f:
         f.write(html)

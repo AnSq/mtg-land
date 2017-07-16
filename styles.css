@@ -2,12 +2,7 @@ body {
     font-family: "Trebuchet MS";
 }
 
-table {
-    border-spacing: 0;
-    border-collapse: collapse;
-}
-
-td, tr, img, table, tbody {
+.card, .set, img {
     margin: 0;
     padding: 0;
 }
@@ -16,49 +11,25 @@ td, tr, img, table, tbody {
     margin-left: 4em;
 }
 
-/*div {
-    width: 288px;
-    height: 242px;
-    overflow: hidden;
-    position: relative;
-}
-
-img {
-    position: absolute;
-    top: -12px;
-    left: -12px;
-}
-
-div:hover {
-    overflow: visible;
-    z-index: 2;
-}
-*/
-/*img:hover {
-    top: 0;
-    left: 0;
-}*/
-
 img {
     display: block;
     width: 120px;
     height: auto;
 }
 
-td {
+.card {
     display: inline-block;
     font-size: 10pt;
     text-align: center;
     padding: 2px 2px 0.5em;
 }
 
-.set_title {
-    display: block;
+h2 {
     font-size: 18pt;
-    text-align: left;
+    margin-bottom: 0.2em;
 }
 
-tr {
+.set, #buttons {
     display: block;
     padding-bottom: 20px;
     border-bottom: 3px solid black;
