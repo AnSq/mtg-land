@@ -35,7 +35,7 @@ set_title_html = """\
 """
 
 card_html = """\
-                    <td><div class="card">
+                    <td><div class="card color_{color}">
                         <input type="checkbox" id="{card_code}" name="{card_code}" class="cardcheck">
                         <label for="{card_code}"><img src="{fname}" title="{alt}" /></label>
                         {alt}
@@ -83,7 +83,7 @@ def main():
             for card_num in sets[set_code][color]:
                 card_code = "%s_%s_%s" % (color, set_code, card_num)
                 fname = "images/%s.jpg" % card_code
-                body += card_html.format(fname=fname, card_code=card_code, alt=card_code.replace("_"," "))
+                body += card_html.format(fname=fname, card_code=card_code, alt=card_code.replace("_"," "), color=color.lower())
                 total += 1
         body += "\t\t\t\t</tr>\n"
 

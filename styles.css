@@ -85,9 +85,49 @@ tr {
 .card input:checked + label::after {
     content: "✓";
     font-size: 60pt;
-    color: green;
     position: absolute;
     bottom: 5%;
     left: 55%;
     margin-left: -25%;
+}
+
+.card.color_w input:checked + label::after {
+    color: #FEFFF9;
+    text-shadow:
+       -1px -1px 0 #DACD77,
+        1px -1px 0 #DACD77,
+       -1px  1px 0 #DACD77,
+        1px  1px 0 #DACD77;
+}
+.card.color_u input:checked + label::after {
+    color: #A4BBE5;
+    text-shadow:
+       -1px -1px 0 #19519B,
+        1px -1px 0 #19519B,
+       -1px  1px 0 #19519B,
+        1px  1px 0 #19519B;
+}
+.card.color_b input:checked + label::after {
+    color: #9B9293;
+    text-shadow:
+       -1px -1px 0 #180F10,
+        1px -1px 0 #180F10,
+       -1px  1px 0 #180F10,
+        1px  1px 0 #180F10;
+}
+.card.color_r input:checked + label::after {
+    color: #EC9061;
+    text-shadow:
+       -1px -1px 0 #D2272D,
+        1px -1px 0 #D2272D,
+       -1px  1px 0 #D2272D,
+        1px  1px 0 #D2272D;
+}
+.card.color_g input:checked + label::after {
+    color: #C4DCBA;
+    text-shadow:
+       -1px -1px 0 #0A6B36,
+        1px -1px 0 #0A6B36,
+       -1px  1px 0 #0A6B36,
+        1px  1px 0 #0A6B36;
 }
