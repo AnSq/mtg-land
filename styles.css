@@ -12,6 +12,10 @@ td, tr, img, table, tbody {
     padding: 0;
 }
 
+#count {
+    margin-left: 4em;
+}
+
 /*div {
     width: 288px;
     height: 242px;

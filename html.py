@@ -18,12 +18,14 @@ html_header = """\
         <script src="script.js"></script>
     </head>
     <body>
+        <h1>MTG Basic Land</h1>
         <form name="form" id="form">
             <table><tbody>
                 <tr>
                     <input type="button" id="save" name="save" value="Save">
                     <input type="file" id="load" name="load" accept=".json">
-                    <input type="reset">
+                    <input type="reset" id="reset">
+                    <span id="count"><span id="checked">?</span> / <span id="total">?</span></span>
                 </tr>
 """
 
@@ -34,7 +36,7 @@ set_title_html = """\
 
 card_html = """\
                     <td><div class="card">
-                        <input type="checkbox" id="{card_code}" name="{card_code}">
+                        <input type="checkbox" id="{card_code}" name="{card_code}" class="cardcheck">
                         <label for="{card_code}"><img src="{fname}" title="{alt}" /></label>
                         {alt}
                     </div></td>
