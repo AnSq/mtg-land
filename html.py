@@ -24,13 +24,15 @@ header_html = """\
                 <input type="button" id="save" name="save" value="Save">
                 <input type="file" id="load" name="load" accept=".json">
                 <input type="reset" id="reset">
-                <span id="count"><span id="checked">?</span> / <span id="total">?</span></span>
+                <span id="totalcount" class="count"><span class="checked">?</span> / <span class="total">?</span></span>
             </div>
 """
 
 set_title_html = """\
-            <div class="set" id="{set_code}" data-title="{set_title}">
+            <div class="set" id="set_{set_code}" data-title="{set_title}">
                 <h2 class="set_title"><i class="ss ss-{set_symbol}"></i> {set_code} - {set_title}</h2>
+                <span class="count"><span class="checked">?</span> / <span class="total">?</span></span>
+                <br>
 """
 
 card_html = """\
@@ -45,7 +47,7 @@ set_end_html = """\
             </div>
 """
 
-footer_html = """
+footer_html = """\
         </form>
     </body>
 </html>

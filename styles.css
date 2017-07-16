@@ -7,8 +7,9 @@ body {
     padding: 0;
 }
 
-#count {
+.count {
     margin-left: 4em;
+    font-size: 12pt;
 }
 
 img {
@@ -25,8 +26,19 @@ img {
 }
 
 h2 {
+    display: inline-block;
     font-size: 18pt;
-    margin-bottom: 0.2em;
+    margin: 0 0 0.2em;
+}
+
+.complete h2 {
+    color: #777;
+}
+.complete .count {
+    color: green;
+}
+.complete .count::after {
+    content: " ✓";
 }
 
 .set, #buttons {
