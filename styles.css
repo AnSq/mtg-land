@@ -1,5 +1,6 @@
 body {
-    font-family: "Trebuchet MS";
+    font-family: "Trebuchet MS", sans-serif;
+    font-variant: small-caps;
 }
 
 .card, .set, img {
