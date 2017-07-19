@@ -14,6 +14,7 @@ header_html = """\
         <meta charset="utf-8">
         <title>MTG Basic Land</title>
         <link href="styles.css" rel="stylesheet" />
+        <link href="cards.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css" />
         <script src="script.js"></script>
     </head>
@@ -37,8 +38,8 @@ set_title_html = """\
 
 card_html = """\
                 <div class="card color_{color}">
-                    <input type="checkbox" id="{card_code}" name="{card_code}" class="cardcheck">
-                    <label for="{card_code}"><img src="{fname}" title="{alt}" /></label>
+                    <input type="checkbox" id="{card_code}" name="{card_code}">
+                    <label for="{card_code}"><div class="img"></div></label>
                     {alt}
                 </div>
 """

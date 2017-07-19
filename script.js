@@ -142,7 +142,7 @@ function setup_counters() {
     var have = 0;
 
     for (var i = 0; i < sets.length; i++) {
-        var checks = sets[i].getElementsByClassName("cardcheck");
+        var checks = sets[i].querySelectorAll(".card > input");
         var set_total = 0;
         var set_have = 0;
 

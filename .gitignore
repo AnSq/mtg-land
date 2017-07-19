@@ -7,4 +7,5 @@
 *.jpg
 *.json
 merge_dup.py
+cards.css
 !LICENSE.txt
