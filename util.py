@@ -11,7 +11,7 @@ def init_docs():
     if not os.path.exists("docs"):
         os.mkdir("docs")
 
-    for f in ("script.js", "styles.css", "placeholder_styles.css"):
+    for f in ("script.js", "styles.css", "placeholder_styles.css", "blanks.html"):
         if not os.path.exists("docs/" + f):
             subprocess.call(["cp", f, "docs/"])
 
