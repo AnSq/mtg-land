@@ -2,6 +2,7 @@
 
 import os
 import re
+import subprocess
 
 natural_order = lambda text: [(int(group) if group.isdigit() else group) for group in re.split("(\d+)", text)]
 
@@ -12,7 +13,7 @@ def init_docs():
 
     for f in ("script.js", "styles.css", "placeholder_styles.css"):
         if not os.path.exists("docs/" + f):
-            os.symlink("../" + f, "docs/" + f)
+            subprocess.call(["cp", f, "docs/"])
 
 
 set_symbol_translation = {
