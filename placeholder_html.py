@@ -73,7 +73,7 @@ def main():
 
     html = html_header + body + html_footer
 
-    with open("placeholders.html", "w") as f:
+    with open("docs/placeholders.html", "w") as f:
         f.write(html)
 
     print "placeholders_html done"

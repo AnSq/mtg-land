@@ -7,7 +7,7 @@ from PIL import Image
 
 
 wubrg = "WUBRG"
-target_dir = "card_sheets"
+target_dir = "docs/card_sheets"
 
 
 def main(folder):
@@ -31,7 +31,7 @@ def main(folder):
     for i in img_list:
         img_colors[i[0]].append(os.path.join(folder, i))
 
-    with open("cards.css", "w") as f:
+    with open("docs/cards.css", "w") as f:
         for c in wubrg:
             print c + "..."
 

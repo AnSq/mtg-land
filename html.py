@@ -94,7 +94,7 @@ def main():
 
     html = header_html + body + footer_html
 
-    with open("land.html", "w") as f:
+    with open("docs/land.html", "w") as f:
         f.write(html)
 
     print "Processed", total

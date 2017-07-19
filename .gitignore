@@ -1,5 +1,4 @@
 *.pickle
-*.html
 *.txt
 *.pyc
 *.pdf
@@ -7,5 +6,5 @@
 *.jpg
 *.json
 merge_dup.py
-cards.css
 !LICENSE.txt
+!docs/card_sheets/*
