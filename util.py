@@ -1,8 +1,18 @@
 #!/usr/bin/env python
 
+import os
 import re
 
 natural_order = lambda text: [(int(group) if group.isdigit() else group) for group in re.split("(\d+)", text)]
+
+
+def init_docs():
+    if not os.path.exists("docs"):
+        os.mkdir("docs")
+
+    for f in ("script.js", "styles.css", "placeholder_styles.css"):
+        if not os.path.exists("docs/" + f):
+            os.symlink("../" + f, "docs/" + f)
 
 
 set_symbol_translation = {

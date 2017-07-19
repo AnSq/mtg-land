@@ -43,6 +43,8 @@ cards_per_page = 9
 
 
 def main():
+    util.init_docs()
+
     placeholders = []
     with open("placeholders.txt") as f:
         for line in f:

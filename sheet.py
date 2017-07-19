@@ -5,12 +5,16 @@ import os
 import subprocess
 from PIL import Image
 
+import util
+
 
 wubrg = "WUBRG"
 target_dir = "docs/card_sheets"
 
 
 def main(folder):
+    util.init_docs()
+
     if not os.path.exists(target_dir):
         os.mkdir(target_dir)
 

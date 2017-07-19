@@ -58,6 +58,8 @@ set_order = list(reversed(util.set_order))
 
 
 def main():
+    util.init_docs()
+
     sets = {}
 
     for i in os.listdir("images"):

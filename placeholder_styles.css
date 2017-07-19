@@ -1,0 +1,122 @@
+body {
+    font-size: 0;
+}
+
+p {
+    margin: 0.375em 0;
+    padding: 0 8px;
+    text-align: center;
+}
+
+p:first-child {
+    margin-top: 8px;
+}
+
+p:last-child {
+    margin-bottom: 8px;
+}
+
+.card {
+    /*float: left;*/
+    display: inline-block;
+    margin: 0;
+    border: 2px solid black;
+    /*padding: 8px;*/
+    padding: 0;
+    overflow: hidden;
+    font-family: "Trebuchet MS";
+    font-size: 16pt;
+    vertical-align: top;
+    position: relative;
+}
+
+.card_1 {
+    display: flex;
+    /*justify-content: center;*/
+    align-items: center;
+}
+
+.card, .card_1, /*.count,*/ .type, .set {
+    width: 224px;
+}
+
+.title, .range {
+    width: 200px; /*width - 24*/
+}
+
+.card, .card_1{
+    height: 300px;
+}
+
+
+.type {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+}
+
+.card_center {
+    position: relative;
+    top: -10pt;
+}
+
+.symbol {
+    margin-bottom: 0;
+    font-size: 20pt;
+}
+
+.title {
+    /*margin-top: 24px;*/
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 20pt;
+    font-variant: small-caps;
+    padding: 0 12px;
+    /*position: relative;
+    left: 0;*/
+}
+
+.set {
+    margin-top: 0;
+    /*margin-bottom: 24px;*/
+    font-size: 8pt;
+    padding: 0;
+}
+
+.range {
+    margin-bottom: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 0 12px;
+    font-size: 10pt;
+}
+
+/*.count {
+    margin-top: 0;
+    font-size: 8pt;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+}*/
+
+.page {
+    display: inline;
+}
+
+@media print {
+    .page {
+        page-break-after: always;
+    }
+
+    .card {
+        page-break-inside: avoid;
+    }
+
+    .unparsed, .invalid {
+        display: none;
+    }
+}
