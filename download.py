@@ -19,6 +19,7 @@ def main():
         if not os.path.exists(save_path):
             os.mkdir(save_path)
 
+        results = []
         for i, links in enumerate(images):
             color = colors[i]
             for link in links:
@@ -27,9 +28,12 @@ def main():
                 card_num = sp[6].replace(".jpg", "")
                 fname = "%s_%s_%s.jpg" % (color, set_code, card_num)
 
-                pool.apply_async(download, (link, fname))
+                results.append(pool.apply_async(download, (link, fname)))
 
         pool.close()
+
+        for r in results:
+            r.wait(999999999)
 
     except KeyboardInterrupt:
         pool.terminate()
@@ -38,8 +42,11 @@ def main():
 
 
 def download(url, fname):
-    print "%s -> %s" % (url, fname)
-    urllib.urlretrieve(url, save_path + "/" + fname)
+    try:
+        print "%s -> %s" % (url, fname)
+        urllib.urlretrieve(url, save_path + "/" + fname)
+    except KeyboardInterrupt:
+        pass
 
 
 if __name__ == "__main__":

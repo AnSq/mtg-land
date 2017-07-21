@@ -23,31 +23,28 @@ def get_base():
 
 
 def process_set_link(link):
-    global queue
+    try:
+        global queue
 
-    set_code = link.split("/")[3]
+        set_code = link.split("/")[3]
 
-    print link
-    r = requests.get(link)
+        print link
+        r = requests.get(link)
 
-    d = pq(r.text)
-    comment = d("body table:nth-child(7) td:nth-child(3) p:nth-child(2) span b")
-    if comment and comment[0].text == "ONLY AVAILABLE ONLINE":
-        print "\tSkip %s" % set_code.upper()
-        return
+        d = pq(r.text)
+        comment = d("body table:nth-child(7) td:nth-child(3) p:nth-child(2) span b")
+        if comment and comment[0].text == "ONLY AVAILABLE ONLINE":
+            print "\tSkip %s" % set_code.upper()
+            return
 
-    d = pq(r.text)
-    d.make_links_absolute("http://magiccards.info")
-    l = d("table:nth-child(7) td:nth-child(3) a[href$='.html'][href*='/en/'][href*='/%s/']" % set_code)
+        d = pq(r.text)
+        d.make_links_absolute("http://magiccards.info")
+        l = d("table:nth-child(7) td:nth-child(3) a[href$='.html'][href*='/en/'][href*='/%s/']" % set_code)
 
-    queue.put(link)
-    for l in [i.attrib['href'] for i in l]:
-        queue.put(l)
+        return [link] + [i.attrib['href'] for i in l]
 
-
-def pool_init(q):
-    global queue
-    queue = q
+    except KeyboardInterrupt:
+        pass
 
 
 def main():
@@ -69,19 +66,27 @@ def main():
 
         all_links = []
 
-        queue = multiprocessing.Queue()
-        pool = multiprocessing.Pool(32, pool_init, [queue])
+        pool = multiprocessing.Pool(32)
 
         try:
+            results = []
             for link in set_links:
-                pool.apply_async(process_set_link, [link])
+                results.append(pool.apply_async(process_set_link, [link]))
             pool.close()
+            for r in results:
+                r.wait(999999999)
         except KeyboardInterrupt:
             pool.terminate()
-        pool.join()
+            print
+            sys.exit()
+        else:
+            pool.join()
 
-        while not queue.empty():
-            all_links.append(queue.get())
+        for r in results:
+            result = r.get()
+            if result:
+                for l in result:
+                    all_links.append(l)
 
         color_images = []
         set_codes = set()
