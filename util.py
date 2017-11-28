@@ -11,8 +11,8 @@ def init_docs():
     if not os.path.exists("docs"):
         os.mkdir("docs")
 
-    for f in ("script.js", "styles.css", "placeholder_styles.css", "blanks.html"):
-        if not os.path.exists("docs/" + f):
+    for f in ("script.js", "styles.css", "placeholder_styles.css", "blanks.html", "index.html"):
+        if not os.path.exists("docs/" + f) or os.path.getmtime(f) > os.path.getmtime("docs/" + f):
             subprocess.call(["cp", f, "docs/"])
 
 
@@ -61,6 +61,7 @@ set_symbol_translation = {
     "ITP"   : "x2ps",
     "IA"    : "ice",
     "4E"    : "4ed",
+    "SUMMER": "psum",
     "RV"    : "3ed",
     "CEDI"  : "xice",
     "CED"   : "xcle",
@@ -81,6 +82,7 @@ set_order = [
     'CED',
     'CEDI',
     'RV',
+    'SUMMER',
     '4E',
     'IA',
     'ITP',
@@ -184,4 +186,10 @@ set_order = [
     'CMA',
     'E01',
     'HOU',
+    'C17',
+    'XLN'
 ]
+
+
+if __name__ == "__main__":
+    init_docs()
