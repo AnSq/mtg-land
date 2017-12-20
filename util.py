@@ -187,7 +187,8 @@ set_order = [
     'E01',
     'HOU',
     'C17',
-    'XLN'
+    'XLN',
+    'UST'
 ]
 
 
