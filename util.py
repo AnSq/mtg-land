@@ -188,6 +188,7 @@ set_order = [
     'HOU',
     'C17',
     'XLN',
+    'DDT',
     'UST'
 ]
 
