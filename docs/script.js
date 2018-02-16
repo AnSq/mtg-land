@@ -63,14 +63,17 @@ function update_set_counter(set_code, set_have, set_total) {
 
 function update_all_counter(have, total) {
     document.querySelector("#totalcount .checked").innerHTML = have;
-    document.querySelector("#totalcount .total").innerHTML   = total;
+    if (!(total === null)) {
+        document.querySelector("#totalcount .total").innerHTML   = total;
+    }
 }
 
 
 function load_file(file) {
+    document.getElementById("reset").click();
     var reader = new FileReader();
     reader.addEventListener("load", function(event) {
-        var total = 0;
+        //var total = 0;
         var have = 0;
 
         var data = JSON.parse(event.target.result);
@@ -86,14 +89,14 @@ function load_file(file) {
                     have += 1;
                     set_have += 1;
                 }
-                total += 1;
+                //total += 1;
                 set_total += 1;
             }
 
             update_set_counter(data[i]["code"], set_have, set_total);
         }
 
-        update_all_counter(have, total);
+        update_all_counter(have, null);
     });
     reader.readAsText(file);
 }
