@@ -189,7 +189,8 @@ set_order = [
     'C17',
     'XLN',
     'DDT',
-    'UST'
+    'UST',
+    'RIX'
 ]
 
 

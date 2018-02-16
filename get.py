@@ -9,12 +9,15 @@ import sys
 import util
 
 
+session = requests.Session()
+
+
 def get_base():
     basics = ["plains", "island", "swamp", "mountain", "forest"]
     base = []
     for basic in basics:
         print basic
-        r = requests.get("http://magiccards.info/query?q=!%s" % basic)
+        r = session.get("http://magiccards.info/query?q=!%s" % basic)
         d = pq(r.text)
         d.make_links_absolute("http://magiccards.info")
         l = d("body > table > tr:nth-child(1) > td:nth-child(2) > span:nth-child(1) > a:nth-child(1)")
@@ -29,7 +32,7 @@ def process_set_link(link):
         set_code = link.split("/")[3]
 
         print link
-        r = requests.get(link)
+        r = requests.get(link) #can't use session in thread
 
         d = pq(r.text)
         comment = d("body table:nth-child(7) td:nth-child(3) p:nth-child(2) span b")
@@ -56,7 +59,7 @@ def main():
         set_code = b.split("/")[3]
 
         print b
-        r = requests.get(b)
+        r = session.get(b)
 
         d = pq(r.text)
         d.make_links_absolute("http://magiccards.info")

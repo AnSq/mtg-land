@@ -7,11 +7,13 @@ from pyquery import PyQuery as pq
 
 import util
 
+session = requests.Session()
+
 
 def main():
     titles = {}
     for set_code in util.set_order:
-        r = requests.get("http://magiccards.info/%s/en.html" % set_code.lower())
+        r = session.get("http://magiccards.info/%s/en.html" % set_code.lower())
         d = pq(r.text)
 
         title = d("title")[0].text
