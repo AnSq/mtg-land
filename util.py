@@ -85,6 +85,7 @@ set_order = [
     'SUMMER',
     '4E',
     'IA',
+    'PTD',
     'ITP',
     'ARENA',
     'MR',
@@ -111,6 +112,7 @@ set_order = [
     'ON',
     '8E',
     'MI',
+    'WCD',
     'CHK',
     'UH',
     '9E',
@@ -190,8 +192,13 @@ set_order = [
     'XLN',
     'DDT',
     'UST',
-    'RIX'
+    'RIX',
+    'DDU',
+    'DOM'
 ]
+
+
+set_ignore = ('SALVAT',)
 
 
 if __name__ == "__main__":

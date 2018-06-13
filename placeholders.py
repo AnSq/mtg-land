@@ -7,6 +7,8 @@ import util
 
 
 def main():
+    print >>sys.stderr, "Generating placeholders"
+
     with open("images.pickle") as f:
         images = pickle.load(f)
 

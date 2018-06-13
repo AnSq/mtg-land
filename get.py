@@ -36,7 +36,7 @@ def process_set_link(link):
 
         d = pq(r.text)
         comment = d("body table:nth-child(7) td:nth-child(3) p:nth-child(2) span b")
-        if comment and comment[0].text == "ONLY AVAILABLE ONLINE":
+        if (comment and comment[0].text == "ONLY AVAILABLE ONLINE") or (set_code.upper() in util.set_ignore):
             print "\tSkip %s" % set_code.upper()
             return
 
@@ -51,6 +51,8 @@ def process_set_link(link):
 
 
 def main():
+    print "Getting image list"
+
     base = get_base()
     images = []
     total = 0

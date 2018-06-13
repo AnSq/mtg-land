@@ -13,6 +13,8 @@ target_dir = "docs/card_sheets"
 
 
 def main(folder):
+    print "Building card sheets"
+
     util.init_docs()
 
     if not os.path.exists(target_dir):

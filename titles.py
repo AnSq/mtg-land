@@ -11,6 +11,7 @@ session = requests.Session()
 
 
 def main():
+    print "Retrieving set titles"
     titles = {}
     for set_code in util.set_order:
         r = session.get("http://magiccards.info/%s/en.html" % set_code.lower())

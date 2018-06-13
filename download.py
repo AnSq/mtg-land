@@ -8,6 +8,8 @@ import multiprocessing
 save_path = "images"
 
 def main():
+    print "Downloading images"
+
     pool = multiprocessing.Pool(32)
 
     try:

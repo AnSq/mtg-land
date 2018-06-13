@@ -43,6 +43,8 @@ cards_per_page = 9
 
 
 def main():
+    print "Assembling placeholders.html"
+
     util.init_docs()
 
     placeholders = []
@@ -77,8 +79,6 @@ def main():
 
     with open("docs/placeholders.html", "w") as f:
         f.write(html)
-
-    print "placeholders_html done"
 
 
 def card(p, titles, types):

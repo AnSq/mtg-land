@@ -58,6 +58,8 @@ set_order = list(reversed(util.set_order))
 
 
 def main():
+    print "Assembling land.html"
+
     util.init_docs()
 
     sets = {}
