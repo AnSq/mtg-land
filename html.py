@@ -42,6 +42,7 @@ toc_entry_html = """\
                             <div>{set_code}</div>
                             <div class="count"><span class="checked">?</span>/<span class="total">?</span></div>
                         </a>
+                        <div class="meter"></div>
                     </li>
 """
 

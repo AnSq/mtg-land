@@ -21,6 +21,7 @@ a:hover {
     display: inline-block;
     margin: 4px;
     vertical-align: top;
+    position: relative;
 }
 
 #toc a {
@@ -34,11 +35,25 @@ a:hover {
     border-color: green;
 }
 
+#toc .complete .meter {
+    background-color: lightgreen;
+}
+
 #toc .ss {
     display: inline-block;
     color: black;
     font-size: 24pt;
     margin-bottom: 4px;
+}
+
+.meter {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 75%;
+    background-color: lightgray;
 }
 
 .top_link {

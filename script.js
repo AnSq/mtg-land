@@ -59,8 +59,12 @@ function update_complete(set_code, set_have, set_total) {
 function update_set_counter(set_code, set_have, set_total) {
     document.querySelector("#set_" + set_code + " .checked").innerHTML = set_have;
     document.querySelector("#set_" + set_code + " .total").innerHTML   = set_total;
+
     document.querySelector("#toc_" + set_code + " .checked").innerHTML = set_have;
     document.querySelector("#toc_" + set_code + " .total").innerHTML   = set_total;
+
+    document.querySelector("#toc_" + set_code + " .meter").style.height = "" + (100 * set_have / set_total) + "%";
+
     update_complete(set_code, set_have, set_total);
 }
 

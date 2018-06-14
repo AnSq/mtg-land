@@ -59,8 +59,12 @@ function update_complete(set_code, set_have, set_total) {
 function update_set_counter(set_code, set_have, set_total) {
     document.querySelector("#set_" + set_code + " .checked").innerHTML = set_have;
     document.querySelector("#set_" + set_code + " .total").innerHTML   = set_total;
+
     document.querySelector("#toc_" + set_code + " .checked").innerHTML = set_have;
     document.querySelector("#toc_" + set_code + " .total").innerHTML   = set_total;
+
+    document.querySelector("#toc_" + set_code + " .meter").style.height = "" + (100 * set_have / set_total) + "%";
+
     update_complete(set_code, set_have, set_total);
 }
 
@@ -118,15 +122,11 @@ function checkbox_click(target) {
 
     if (target.checked) {
         total_have = total_before + 1;
-        //document.querySelector("#totalcount .checked").innerHTML = before + 1;
         set_have = set_before + 1;
-        //document.querySelector(set_query).innerHTML              = set_have;
     }
     else {
         total_have = total_before - 1;
-        //document.querySelector("#totalcount .checked").innerHTML = before - 1;
         set_have = set_before - 1;
-        //document.querySelector(set_query).innerHTML              = set_have;
     }
 
     update_all_counter(total_have, null);
