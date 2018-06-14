@@ -47,9 +47,11 @@ function save_button() {
 function update_complete(set_code, set_have, set_total) {
     if (set_have === set_total) {
         document.getElementById("set_" + set_code).classList.add("complete");
+        document.getElementById("toc_" + set_code).classList.add("complete");
     }
     else {
         document.getElementById("set_" + set_code).classList.remove("complete");
+        document.getElementById("toc_" + set_code).classList.remove("complete");
     }
 }
 
@@ -57,6 +59,8 @@ function update_complete(set_code, set_have, set_total) {
 function update_set_counter(set_code, set_have, set_total) {
     document.querySelector("#set_" + set_code + " .checked").innerHTML = set_have;
     document.querySelector("#set_" + set_code + " .total").innerHTML   = set_total;
+    document.querySelector("#toc_" + set_code + " .checked").innerHTML = set_have;
+    document.querySelector("#toc_" + set_code + " .total").innerHTML   = set_total;
     update_complete(set_code, set_have, set_total);
 }
 
@@ -103,7 +107,8 @@ function load_file(file) {
 
 
 function checkbox_click(target) {
-    var before = parseInt(document.querySelector("#totalcount .checked").innerHTML, 10);
+    var total_before = parseInt(document.querySelector("#totalcount .checked").innerHTML, 10);
+    var total_have;
 
     var set_code = target.id.split("_")[1];
     var set_query = "#set_" + set_code + " .checked";
@@ -112,16 +117,20 @@ function checkbox_click(target) {
     var set_have;
 
     if (target.checked) {
-        document.querySelector("#totalcount .checked").innerHTML = before + 1;
+        total_have = total_before + 1;
+        //document.querySelector("#totalcount .checked").innerHTML = before + 1;
         set_have = set_before + 1;
-        document.querySelector(set_query).innerHTML              = set_have;
+        //document.querySelector(set_query).innerHTML              = set_have;
     }
     else {
-        document.querySelector("#totalcount .checked").innerHTML = before - 1;
+        total_have = total_before - 1;
+        //document.querySelector("#totalcount .checked").innerHTML = before - 1;
         set_have = set_before - 1;
-        document.querySelector(set_query).innerHTML              = set_have;
+        //document.querySelector(set_query).innerHTML              = set_have;
     }
 
+    update_all_counter(total_have, null);
+    update_set_counter(set_code, set_have, set_total);
     update_complete(set_code, set_have, set_total);
 }
 
@@ -132,9 +141,9 @@ function reset_button() {
         counters[i].innerHTML = 0;
     }
 
-    var sets = document.getElementsByClassName("set");
-    for (var i = 0; i < sets.length; i++) {
-        sets[i].classList.remove("complete");
+    var complete = document.getElementsByClassName("complete");
+    for (var i = complete.length-1; i >= 0; i--) {
+        complete[i].classList.remove("complete");
     }
 }
 

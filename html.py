@@ -36,7 +36,13 @@ header_html = """\
 """
 
 toc_entry_html = """\
-                    <li><a href="#set_{set_code}" title="{set_title}"><i class="ss ss-{set_symbol}"></i><br>{set_code}</a></li>
+                    <li id="toc_{set_code}">
+                        <a href="#set_{set_code}" title="{set_title}">
+                            <div><i class="ss ss-{set_symbol}"></i></div>
+                            <div>{set_code}</div>
+                            <div class="count"><span class="checked">?</span>/<span class="total">?</span></div>
+                        </a>
+                    </li>
 """
 
 set_title_html = """\

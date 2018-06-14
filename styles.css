@@ -30,6 +30,10 @@ a:hover {
     padding: 4px;
 }
 
+#toc .complete a {
+    border-color: green;
+}
+
 #toc .ss {
     display: inline-block;
     color: black;
@@ -48,7 +52,7 @@ a:hover {
     padding: 0;
 }
 
-.count {
+.set .count {
     margin-left: 4em;
     font-size: 12pt;
 }
