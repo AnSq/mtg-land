@@ -81,27 +81,27 @@ function load_file(file) {
     document.getElementById("reset").click();
     var reader = new FileReader();
     reader.addEventListener("load", function(event) {
-        //var total = 0;
         var have = 0;
 
         var data = JSON.parse(event.target.result);
         for (var i in data) {
-            var set_total = 0;
-            var set_have = 0;
+            if (document.getElementById("set_" + data[i]["code"]) !== null) {
+                var set_total = 0;
+                var set_have = 0;
 
-            for (var j in data[i]["cards"]) {
-                var checkbox = document.getElementById(j);
-                checkbox.checked = data[i]["cards"][j];
+                for (var j in data[i]["cards"]) {
+                    var checkbox = document.getElementById(j);
+                    checkbox.checked = data[i]["cards"][j];
 
-                if (checkbox.checked) {
-                    have += 1;
-                    set_have += 1;
+                    if (checkbox.checked) {
+                        have += 1;
+                        set_have += 1;
+                    }
+                    set_total += 1;
                 }
-                //total += 1;
-                set_total += 1;
-            }
 
-            update_set_counter(data[i]["code"], set_have, set_total);
+                update_set_counter(data[i]["code"], set_have, set_total);
+            }
         }
 
         update_all_counter(have, null);
@@ -144,6 +144,11 @@ function reset_button() {
     var complete = document.getElementsByClassName("complete");
     for (var i = complete.length-1; i >= 0; i--) {
         complete[i].classList.remove("complete");
+    }
+
+    var meters = document.getElementsByClassName("meter");
+    for (var i = 0; i < meters.length; i++) {
+        meters[i].style.height = 0;
     }
 }
 

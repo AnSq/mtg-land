@@ -79,13 +79,10 @@ set_order = [
     'BE',
     'UN',
     'AN',
-    'CED',
-    'CEDI',
     'RV',
     'SUMMER',
     '4E',
     'IA',
-    'PTD',
     'ITP',
     'ARENA',
     'MR',
@@ -112,7 +109,6 @@ set_order = [
     'ON',
     '8E',
     'MI',
-    'WCD',
     'CHK',
     'UH',
     '9E',
@@ -130,7 +126,6 @@ set_order = [
     'PCH',
     'ZEN',
     'GVL',
-    'PDS',
     'PVC',
     'ROE',
     'DPA',
@@ -138,7 +133,6 @@ set_order = [
     'M11',
     'DDF',
     'SOM',
-    'PD2',
     'MBS',
     'DDG',
     'NPH',
@@ -198,7 +192,7 @@ set_order = [
 ]
 
 
-set_ignore = ('SALVAT',)
+set_ignore = ('CED', 'CEDI', 'PTD', 'WCD', 'PDS', 'PD2', 'SALVAT',)
 
 
 if __name__ == "__main__":
