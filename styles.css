@@ -74,8 +74,8 @@ a:hover {
 
 .img {
     display: block;
-    width: 120px;
-    height: 171px;
+    width: 140px;
+    height: 195px;
 }
 
 .card {
@@ -126,6 +126,7 @@ h2 .ss {
 .card.color_b .img {background-image: url(card_sheets/B.jpg);}
 .card.color_r .img {background-image: url(card_sheets/R.jpg);}
 .card.color_g .img {background-image: url(card_sheets/G.jpg);}
+.card.color_c .img {background-image: url(card_sheets/C.jpg);}
 
 .card input {
     position: absolute;

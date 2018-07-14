@@ -1,10 +1,5 @@
-*.pickle
-*.txt
-*.pyc
-*.pdf
-*.zip
-*.jpg
 *.json
-merge_dup.py
-!LICENSE.txt
-!docs/card_sheets/*
+*.txt
+images_dl/
+v1/
+!v1_to_v2_translations.json

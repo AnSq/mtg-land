@@ -38,9 +38,15 @@ function save_button() {
         data.push(set_data);
     }
 
-    var file_text = JSON.stringify(data, null, "\t");
+    var file_data = {
+        "version" : "2",
+        "sets" : data
+    };
 
-    download(file_text, "application/json", "mtg-land.json");
+    var file_text = JSON.stringify(file_data, null, "\t");
+
+    var have = document.querySelector("#totalcount .checked").innerHTML;
+    download(file_text, "application/json", "mtg-land_" + have + ".json");
 }
 
 
@@ -57,6 +63,10 @@ function update_complete(set_code, set_have, set_total) {
 
 
 function update_set_counter(set_code, set_have, set_total) {
+    if (set_total === null) {
+        set_total = parseInt(document.querySelector("#set_" + set_code + " .total").innerHTML, 10);
+    }
+
     document.querySelector("#set_" + set_code + " .checked").innerHTML = set_have;
     document.querySelector("#set_" + set_code + " .total").innerHTML   = set_total;
 
@@ -81,32 +91,116 @@ function load_file(file) {
     document.getElementById("reset").click();
     var reader = new FileReader();
     reader.addEventListener("load", function(event) {
-        var have = 0;
-
         var data = JSON.parse(event.target.result);
-        for (var i in data) {
-            if (document.getElementById("set_" + data[i]["code"]) !== null) {
-                var set_total = 0;
-                var set_have = 0;
-
-                for (var j in data[i]["cards"]) {
-                    var checkbox = document.getElementById(j);
-                    checkbox.checked = data[i]["cards"][j];
-
-                    if (checkbox.checked) {
-                        have += 1;
-                        set_have += 1;
-                    }
-                    set_total += 1;
-                }
-
-                update_set_counter(data[i]["code"], set_have, set_total);
-            }
+        if (Array.isArray(data)) {
+            load_v1_file(data);
         }
-
-        update_all_counter(have, null);
+        else if (Object.prototype.toString.call(data) === "[object Object]" && data["version"] === "2") {
+            load_v2_file(data);
+        }
     });
     reader.readAsText(file);
+}
+
+
+function load_v1_file(data) {
+    var have = 0;
+    var itp_warning = false;
+
+    for (var i in data) {
+        var set_code = data[i]["code"];
+
+        if (set_code in window.set_code_v1_to_v2) { // translaste changed set codes from v1 to v2
+            var set_code_v2 = window.set_code_v1_to_v2[set_code]
+            set_code = set_code_v2;
+        }
+
+        if (document.getElementById("set_" + set_code) !== null) {
+            var set_total = 0;
+            var set_have = 0;
+
+            for (var card_code_v1 in data[i]["cards"]) {
+                var card_code = card_code_v1;
+
+                var card_split = card_code_v1.split("_");
+                var card_color = card_split[0];
+                var card_set = card_split[1];
+                var card_num = card_split[2];
+
+                if (card_set in window.set_code_v1_to_v2) { // translaste changed set codes from v1 to v2
+                    card_set = window.set_code_v1_to_v2[card_set];
+                    card_code = card_color + "_" + card_set + "_" + card_num;
+                }
+
+                if (card_code_v1 in window.card_code_v1_to_v2) { // translaste individual changed card codes from v1 to v2
+                    card_code = window.card_code_v1_to_v2[card_code_v1];
+                }
+
+                if (set_code === "BFZ" && card_code_v1.endsWith("b")) { // translate BFZ cards (v2 doesn't use "b" codes)
+                    card_code = card_code_v1.slice(0, -1);
+                }
+                else if (set_code === "ZEN" && parseInt(card_num, 10) >= 250) { // translate ZEN cards (v2 uses "a" codes for half-art)
+                    card_code = card_color + "_" + set_code + "_" + (parseInt(card_num, 10) - 20) + "a";
+                }
+                else if (set_code === "CST") { // translate CST cards (v2 starts at a different number)
+                    card_code = card_color + "_" + set_code + "_" + (parseInt(card_num, 10) + 321);
+                }
+                else if (set_code === "ITP" && card_code.endsWith("?")) { // ITP is missing some cards in v2
+                    if (data[i]["cards"][card_code_v1]) {
+                        console.log("Checked card missing: " + card_code_v1)
+                        itp_warning = true;
+                    }
+                    continue;
+                }
+
+                var checkbox = document.getElementById(card_code);
+                checkbox.checked = data[i]["cards"][card_code_v1];
+
+                if (checkbox.checked) {
+                    have += 1;
+                    set_have += 1;
+                }
+                set_total += 1;
+            }
+
+            update_set_counter(set_code, set_have, null);
+        }
+    }
+
+    update_all_counter(have, null);
+
+    if (itp_warning) {
+        alert("Notice: mtg-land v2 is currently missing some cards from the Introductory Two-Player Set (ITP) which were checked off in the loaded save file.");
+    }
+}
+
+
+function load_v2_file(data) {
+    var sets = data["sets"];
+
+    var have = 0;
+
+    for (var i in sets) {
+        var set_code = sets[i]["code"];
+
+        if (document.getElementById("set_" + set_code) !== null) {
+            var set_have = 0;
+
+            for (var card_code in sets[i]["cards"]) {
+                var checkbox = document.getElementById(card_code);
+                checkbox.checked = sets[i]["cards"][card_code];
+
+                if (checkbox.checked) {
+                    have += 1;
+                    set_have += 1;
+                }
+            }
+
+            update_set_counter(set_code, set_have, null);
+        }
+    }
+
+    update_all_counter(have, null);
 }
 
 
@@ -180,6 +274,25 @@ function setup_counters() {
     }
     update_all_counter(have, total);
 }
+
+
+
+
+var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            window.set_code_v1_to_v2 = data["set_code_v1_to_v2"];
+            window.card_code_v1_to_v2 = data["card_code_v1_to_v2"];
+        }
+        else {
+            alert("Error loading data: " + xhr.status);
+        }
+    }
+}
+xhr.open("GET", "v1_to_v2_translations.json");
+xhr.send();
 
 
 document.addEventListener("DOMContentLoaded", function(event) {
