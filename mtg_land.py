@@ -132,6 +132,28 @@ consts.name_to_color = {
 }
 consts.color_to_name = {v:k for k,v in consts.name_to_color.items()}
 consts.colors = "WUBRGC"
+consts.set_type_to_group = {
+    "core"             : "standard",
+    "expansion"        : "standard",
+    "archenemy"        : "special_format",
+    "planechase"       : "special_format",
+    "draft_innovation" : "special_format",
+    "commander"        : "special_format",
+    "box"              : "other",
+    "starter"          : "other",
+    "premium_deck"     : "other",
+    "funny"            : "un_sets",
+    "promo"            : "promo",
+    "duel_deck"        : "duel_deck",
+}
+consts.group_names_and_order = [
+    ("standard"       , "Standard"),
+    ("special_format" , "Special Formats"),
+    ("duel_deck"      , "Duel Decks"),
+    ("promo"          , "Promos"),
+    ("un_sets"        , "Un-Sets"),
+    ("other"          , "Other"),
+]
 
 consts.sheet_css = Consts()
 consts.sheet_css.sheet = ".card.color_{color} .img {{background-size: {width}px {height}px;}}\n"
@@ -140,13 +162,14 @@ consts.sheet_css.card = "#{card_code} + label > .img {{background-position: -{x_
 consts.land_html = Consts()
 consts.land_html.header = """\
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
     <head>
         <meta charset="utf-8">
         <title>MTG Basic Land</title>
         <link href="styles.css" rel="stylesheet" />
         <link href="cards.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css" />
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="script.js"></script>
     </head>
     <body>
@@ -160,39 +183,65 @@ consts.land_html.header = """\
             </div>
             <div id="toc">
                 <h2>Table of Contents</h2>
-                <ul>
-                    {toc}
-                </ul>
+                {toc}
             </div>
+            <div id="sets">
 """
-consts.land_html.toc_entry = """\
-                    <li id="toc_{set_code}">
-                        <a href="#set_{set_code}" title="{set_title}">
-                            <div><i class="ss ss-{set_symbol}"></i></div>
-                            <div>{set_code}</div>
-                            <div class="count"><span class="checked">?</span>/<span class="total">?</span></div>
-                        </a>
-                        <div class="meter"></div>
-                    </li>
+consts.land_html.toc_group_header = """\
+                <div class="toc_group">
+                    <h3>{group_name}</h3>
+                    <ul>
 """
-consts.land_html.set_title = """\
-            <div class="set" id="set_{set_code}" data-title="{set_title}">
-                <h2 class="set_title"><i class="ss ss-{set_symbol}"></i> {set_code} - {set_title}</h2>
-                <span class="count"><span class="checked">?</span> / <span class="total">?</span></span>
-                <a class="top_link" href="#">↑</a>
-                <br>
-"""
-consts.land_html.card = """\
-                <div class="card color_{color}">
-                    <input type="checkbox" id="{card_code}" name="{card_code}">
-                    <label for="{card_code}"><div class="img"></div></label>
-                    {alt}
+consts.land_html.toc_group_footer = """\
+                    </ul>
                 </div>
 """
+consts.land_html.toc_entry = """\
+                        <li id="toc_{set_code}">
+                            <a href="#set_{set_code}" title="{set_title}">
+                                <div><i class="ss ss-{set_symbol}"></i></div>
+                                <div>{set_code}</div>
+                                <div class="count"><span class="checked">?</span>/<span class="total">?</span></div>
+                            </a>
+                            <div class="meter"></div>
+                        </li>
+"""
+consts.land_html.set_group_header = """\
+                <div class="group" id="group_{group_id}">
+                    <div class="collapsible_header">
+                        <h2>{group_name}</h2>
+                        <span class="toggle">▼</span>
+                        <a class="top_link" href="#">↑</a>
+                    </div>
+                    <div class="collapsible_content">
+"""
+consts.land_html.set_group_footer = """\
+                    </div>
+                </div>
+"""
+consts.land_html.set_title = """\
+                        <div class="set" id="set_{set_code}" data-title="{set_title}">
+                            <div class="collapsible_header">
+                                <h3 class="set_title"><i class="ss ss-{set_symbol}"></i> {set_code} - {set_title}</h3>
+                                <span class="toggle">▼</span>
+                                <span class="count"><span class="checked">?</span> / <span class="total">?</span></span>
+                                <a class="top_link" href="#">↑</a>
+                            </div>
+                            <div class="collapsible_content">
+"""
+consts.land_html.card = """\
+                                <div class="card color_{color}">
+                                    <input type="checkbox" id="{card_code}" name="{card_code}">
+                                    <label for="{card_code}"><span class="img"></span></label>
+                                    <span>{alt}</span>
+                                </div>
+"""
 consts.land_html.set_end = """\
-            </div>
+                            </div>
+                        </div>
 """
 consts.land_html.footer = """\
+            </div>
         </form>
     </body>
 </html>
@@ -201,7 +250,7 @@ consts.land_html.footer = """\
 consts.placeholder_html = Consts()
 consts.placeholder_html.header = """\
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
     <head>
         <meta charset="utf-8">
         <title>MTG Land Placeholder Cards</title>
@@ -462,21 +511,27 @@ def generate_land_html(cards, sets):
 
     total = 0
 
-    for set_code in set_order(sets):
-        set_info = {
-            "set_symbol" : set_symbol(set_code),
-            "set_code"   : caps_set_code(set_code),
-            "set_title"  : sets["data"][set_code]["name"]
-        }
+    for group in consts.group_names_and_order:
+        toc += consts.land_html.toc_group_header.format(group_name=group[1])
+        body += consts.land_html.set_group_header.format(group_name=group[1], group_id=group[0])
+        for set_code in set_order(sets, group[0]):
+            set_info = {
+                "set_symbol" : set_symbol(set_code),
+                "set_code"   : caps_set_code(set_code),
+                "set_title"  : sets["data"][set_code]["name"]
+            }
 
-        toc  += consts.land_html.toc_entry.format(**set_info)
-        body += consts.land_html.set_title.format(**set_info)
+            toc  += consts.land_html.toc_entry.format(**set_info)
+            body += consts.land_html.set_title.format(**set_info)
 
-        for color in consts.colors:
-            for card in organized_cards[set_code][color]:
-                body += consts.land_html.card.format(card_code=card_code(card), alt=card_code(card).replace("_"," "), color=color.lower())
-                total += 1
-        body += consts.land_html.set_end
+            for color in consts.colors:
+                for card in organized_cards[set_code][color]:
+                    body += consts.land_html.card.format(card_code=card_code(card), alt=card_code(card).replace("_"," "), color=color.lower())
+                    total += 1
+            body += consts.land_html.set_end
+
+        toc += consts.land_html.toc_group_footer
+        body += consts.land_html.set_group_footer
 
     html = consts.land_html.header.format(toc=toc.strip()) + body + consts.land_html.footer
 
@@ -644,8 +699,17 @@ def card_color(card):
     return consts.name_to_color[card["name"].split()[-1]]
 
 
-def set_order(sets):
-    return [s["code"] for s in sorted(sets["data"].values(), key=lambda x: x["released_at"], reverse=True)]
+def set_order(sets, group=None):
+    return [
+        s["code"]
+        for s
+        in sorted(
+            sets["data"].values(),
+            key=lambda x: x["released_at"],
+            reverse=True
+        )
+        if (consts.set_type_to_group[s["set_type"]] == group or group is None)
+    ]
 
 
 def print_warnings(data, page):
@@ -723,6 +787,17 @@ def _set_code_translation_table(sets):
     print "{:6}  ->  {:6}  {}".format("old", "new", "name")
     for name in sorted(diff.keys()):
         print "{:6}  ->  {:6}  {}".format(diff[name]["old"] if "old" in diff[name] else "", diff[name]["new"] if "new" in diff[name] else "", name)
+
+
+def _set_types(sets):
+    pp(set([x["set_type"] for x in sets["data"].values()]))
+
+    t = {}
+    for s in sets["data"].values():
+        if s["set_type"] not in t:
+            t[s["set_type"]] = []
+        t[s["set_type"]].append(caps_set_code(s["code"]))
+    pp(t)
 
 
 def main():

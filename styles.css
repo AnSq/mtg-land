@@ -59,7 +59,6 @@ a:hover {
 .top_link {
     font-size: 18pt;
     float: right;
-    margin-top: 4px;
 }
 
 .card, .set, .img {
@@ -78,25 +77,42 @@ a:hover {
     height: 195px;
 }
 
-.card {
-    display: inline-block;
-    font-size: 10pt;
-    text-align: center;
-    padding: 2px 2px 0.5em;
-}
-
 h2 {
     display: inline-block;
-    font-size: 18pt;
-    margin: 0 0 0.2em;
+    font-size: 22pt;
+    margin: 0;
 }
 
-h2 .ss {
+h3 {
+    display: inline-block;
+    font-size: 18pt;
+    margin: 0;
+}
+
+h3 .ss {
     font-size: 24pt;
     vertical-align: middle;
 }
 
-.complete h2 {
+.toggle {
+    font-size: 14pt;
+    float: left;
+    margin: 4px 12px 4px 6px;
+    margin-right: 12px;
+    color: blue;
+    cursor: pointer;
+    transition: transform 200ms;
+}
+
+.collapse {
+    clear: both;
+}
+
+.collapsed > .collapsible_header > .toggle {
+    transform: rotate(-90deg);
+}
+
+.complete h3 {
     color: #777;
 }
 .complete .count {
@@ -106,18 +122,46 @@ h2 .ss {
     content: " ✓";
 }
 
-.set, #buttons, #toc {
-    display: block;
+#buttons, #toc {
     padding-bottom: 20px;
-    border-bottom: 3px solid black;
+}
+
+#buttons, #toc {
     margin-bottom: 20px;
+}
+
+.group, .set {
+    margin-bottom: 10px;
+}
+
+.collapsible_header {
+    padding: 4px 4px 4px 4px;
+}
+
+.collapsible_content {
+    padding: 0 4px 4px 4px;
+}
+
+.group {
+    border: 3px double black;
 }
 
 .set {
     font-size: 0;
+    border: 1px solid black;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+#buttons, #toc {
+    border-bottom: 3px solid black;
 }
 
 .card {
+    display: inline-block;
+    font-size: 10pt;
+    text-align: center;
+    padding: 2px;
     position: relative;
 }
 

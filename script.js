@@ -229,6 +229,26 @@ function checkbox_click(target) {
 }
 
 
+function toggle_set_collapse(target) {
+    var container = target.parentNode.parentNode;
+    var collapse = container.getElementsByClassName("collapsible_content")[0];
+    $(collapse).slideToggle(200);
+    $(container).toggleClass("collapsed");
+}
+
+
+function toc_entry_click(target) {
+    var set_id = $(target.closest("li")).find("a")[0].href.split("#")[1];
+    var set_element = $("#" + set_id)[0];
+    var group_element = set_element.parentNode.parentNode;
+
+    $($(group_element).find(".collapsible_content")[0]).slideDown(0);
+    $(set_element).find(".collapsible_content").slideDown(0);
+    $(group_element).removeClass("collapsed");
+    $(set_element).removeClass("collapsed");
+}
+
+
 function reset_button() {
     var counters = document.getElementsByClassName("checked");
     for (var i = 0; i < counters.length; i++) {
@@ -276,8 +296,6 @@ function setup_counters() {
 }
 
 
-
-
 var xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
     if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -305,4 +323,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
     document.getElementById("reset").addEventListener("click", reset_button);
 
     setup_counters();
+
+    var toggles = document.getElementsByClassName("toggle");
+    for (var i = 0; i < toggles.length; i++) {
+        toggles[i].addEventListener("click", function(event) {
+            toggle_set_collapse(event.target);
+        });
+    }
+
+    var toc_entries = document.querySelectorAll("#toc li");
+    for (var i = 0; i < toc_entries.length; i++) {
+        toc_entries[i].addEventListener("click", function(event) {
+            toc_entry_click(event.target);
+        });
+    }
 });
