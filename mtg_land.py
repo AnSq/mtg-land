@@ -207,7 +207,7 @@ consts.land_html.toc_entry = """\
                         </li>
 """
 consts.land_html.set_group_header = """\
-                <div class="group" id="group_{group_id}">
+                <div class="group collapsible" id="group_{group_id}">
                     <div class="collapsible_header">
                         <h2>{group_name}</h2>
                         <span class="toggle">▼</span>
@@ -220,7 +220,7 @@ consts.land_html.set_group_footer = """\
                 </div>
 """
 consts.land_html.set_title = """\
-                        <div class="set" id="set_{set_code}" data-title="{set_title}">
+                        <div class="set collapsible" id="set_{set_code}" data-title="{set_title}">
                             <div class="collapsible_header">
                                 <h3 class="set_title"><i class="ss ss-{set_symbol}"></i> {set_code} - {set_title}</h3>
                                 <span class="toggle">▼</span>

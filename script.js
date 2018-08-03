@@ -230,22 +230,31 @@ function checkbox_click(target) {
 
 
 function toggle_set_collapse(target) {
-    var container = target.parentNode.parentNode;
-    var collapse = container.getElementsByClassName("collapsible_content")[0];
-    $(collapse).slideToggle(200);
-    $(container).toggleClass("collapsed");
+    var start = performance.now();
+
+    var container = $(target).closest(".collapsible");
+    var collapse = $(container).find(".collapsible_content").first();
+    if (container.hasClass("group")) {
+        collapse.toggle();
+    }
+    else {
+        collapse.slideToggle(200);
+    }
+    container.toggleClass("collapsed");
+
+    console.log(performance.now() - start);
 }
 
 
 function toc_entry_click(target) {
     var set_id = $(target.closest("li")).find("a")[0].href.split("#")[1];
-    var set_element = $("#" + set_id)[0];
-    var group_element = set_element.parentNode.parentNode;
+    var set_element = $("#" + set_id);
+    var group_element = set_element.closest(".group");
 
-    $($(group_element).find(".collapsible_content")[0]).slideDown(0);
-    $(set_element).find(".collapsible_content").slideDown(0);
-    $(group_element).removeClass("collapsed");
-    $(set_element).removeClass("collapsed");
+    group_element.find(".collapsible_content").first().show();
+    set_element.find(".collapsible_content").show();
+    group_element.removeClass("collapsed");
+    set_element.removeClass("collapsed");
 }
 
 
