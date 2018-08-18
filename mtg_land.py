@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #coding: utf-8
 
+from __future__ import division
+
 import requests
 import json
 import time
@@ -35,9 +37,13 @@ consts.image_download_dir = "images_dl"
 consts.image_scaled_dir = "images_scaled"
 consts.sheets_dir = "card_sheets"
 consts.cards_css_fname = "cards.css"
-consts.placeholders_html_fname = "placeholders.html"
+consts.placeholders_html_dir = "placeholders"
+consts.placeholders_html_fname = "{}_{}.html"
+consts.un_c_placeholders_fname = "ALL_un_set+C.html"
+consts.placeholders_all_fname = "all_placeholders.html"
+consts.index_fname = "index.html"
 
-consts.scaled_width = 140.0
+consts.scaled_width = 140
 consts.jpeg_quality = 85
 consts.sheet_background_color = (0, 0, 0)
 
@@ -132,6 +138,13 @@ consts.name_to_color = {
 }
 consts.color_to_name = {v:k for k,v in consts.name_to_color.items()}
 consts.colors = "WUBRGC"
+consts.color_names = {
+    "W" : "White",
+    "U" : "Blue",
+    "B" : "Black",
+    "R" : "Red",
+    "G" : "Green"
+}
 consts.set_type_to_group = {
     "core"             : "standard",
     "expansion"        : "standard",
@@ -142,7 +155,7 @@ consts.set_type_to_group = {
     "box"              : "other",
     "starter"          : "other",
     "premium_deck"     : "other",
-    "funny"            : "un_sets",
+    "funny"            : "un_set",
     "promo"            : "promo",
     "duel_deck"        : "duel_deck",
 }
@@ -151,13 +164,13 @@ consts.group_names_and_order = [
     ("special_format" , "Special Formats"),
     ("duel_deck"      , "Duel Decks"),
     ("promo"          , "Promos"),
-    ("un_sets"        , "Un-Sets"),
+    ("un_set"         , "Un-Sets"),
     ("other"          , "Other"),
 ]
 
 consts.sheet_css = Consts()
 consts.sheet_css.sheet = ".card.color_{color} .img {{background-size: {width}px {height}px;}}\n"
-consts.sheet_css.card = "#{card_code} + label > .img {{background-position: -{x_offset}px -{y_offset}px;}}\n"
+consts.sheet_css.card = "#{card_id} + label > .img {{background-position: -{x_offset}px -{y_offset}px;}}\n"
 
 consts.land_html = Consts()
 consts.land_html.header = """\
@@ -231,8 +244,8 @@ consts.land_html.set_title = """\
 """
 consts.land_html.card = """\
                                 <div class="card color_{color}">
-                                    <input type="checkbox" id="{card_code}" name="{card_code}">
-                                    <label for="{card_code}"><span class="img"></span></label>
+                                    <input type="checkbox" id="{card_id}" name="{card_id}">
+                                    <label for="{card_id}"><span class="img"></span></label>
                                     <span>{alt}</span>
                                 </div>
 """
@@ -254,7 +267,7 @@ consts.placeholder_html.header = """\
     <head>
         <meta charset="utf-8">
         <title>MTG Land Placeholder Cards</title>
-        <link href="placeholder_styles.css" rel="stylesheet" />
+        <link href="../placeholder_styles.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css" />
     </head>
     <body>"""
@@ -263,25 +276,135 @@ consts.placeholder_html.footer = """
 </html>
 """
 consts.placeholder_html.card = """\
-            <div class="card">
-                <div class="card_1">
-                    <div class="card_body">
-                        <p class="type">{card_name}</p>
-                        <div class="card_center">
-                            <p class="symbol"><i class="ss ss-{set_symbol}"></i></p>
-                            <p class="title">{set_name}</p>
-                            <p class="set">({set_code})</p>
-                        </div>
-                        <p class="range">{card_numbers}</p>
+        <div class="card">
+            <div class="card_1">
+                <div class="card_body">
+                    <p class="type">{card_name}</p>
+                    <div class="card_center">
+                        <p class="symbol"><i class="ss ss-{set_symbol}"></i></p>
+                        <p class="set">{set_code}</p>
+                        <p class="title">{set_name}</p>
+                        <p class="group">{group_name}</p>
+                        <p class="release_date">{release_date}</p>
                     </div>
+                    <p class="range">{card_numbers}</p>
                 </div>
-            </div>"""
-consts.placeholder_html.page_start = '\n        <div class="page">'
-consts.placeholder_html.page_end = '\n        </div>'
+            </div>
+        </div>"""
 consts.placeholder_html.cards_per_page = 9
+
+consts.index_html = Consts()
+consts.index_html.header = """\
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <title>MTG Basic Land</title>
+        <link href="index_styles.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div>
+            <h1>MTG Basic Land</h1>
+            <ul>
+                <li><h2><a href="land">Basic Land</a></h2></li>
+                <li>Placeholders:
+"""
+consts.index_html.placeholder_all = '                    <strong>All Placeholders:</strong> <a href="{placeholders_path}">{count} cards <span class="page_count">({page_count:.0f} pages)</span></a>\n'
+consts.index_html.placeholder_table_start = '                    <table>\n'
+consts.index_html.placeholder_header_start = """\
+                        <thead>
+                            <tr>
+                                <td></td>
+"""
+consts.index_html.placeholder_header_cell = '                                <th scope="col">{group_name}</th>\n'
+consts.index_html.placeholder_header_end = """\
+                            </tr>
+                        </thead>
+"""
+consts.index_html.placeholder_tbody_start = '                        <tbody>\n'
+consts.index_html.placeholder_row_start = """\
+                            <tr>
+                                <th scope="row">{color_name}</th>
+"""
+consts.index_html.placeholder_cell = '                                <td><a href="{placeholders_path}">{count:.0f} cards<br><span class="page_count">({page_count:.0f} pages)</span></a></td>\n'
+consts.index_html.placeholder_row_end = '                            </tr>\n'
+consts.index_html.placeholder_tbody_end = '                        </tbody>\n'
+consts.index_html.placeholder_table_end = '                    </table>\n'
+consts.index_html.placeholder_un_c = '                    <strong>All Un-Sets and Colorless:</strong> <a href="{un_c_placeholders_path}">{un_c_count:.0f} cards <span class="page_count">({page_count:.0f} pages)</span></a>\n'
+consts.index_html.footer = """\
+                </li>
+                <li><a href="blanks">Blanks</a></li>
+                <li>Card Sheets:
+                    <ul>
+                        <li><a href="card_sheets/W.jpg">White</a></li>
+                        <li><a href="card_sheets/U.jpg">Blue</a></li>
+                        <li><a href="card_sheets/B.jpg">Black</a></li>
+                        <li><a href="card_sheets/R.jpg">Red</a></li>
+                        <li><a href="card_sheets/G.jpg">Green</a></li>
+                        <li><a href="card_sheets/C.jpg">Colorless</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>
+"""
 
 
 session = requests.Session()
+
+
+
+class Card (object):
+    def __init__(self, raw):
+        self.raw = raw
+        self.raw["collector_number"] = self.raw["collector_number"].encode("utf-8")
+
+
+    def __getattr__(self, attr):
+        return self.raw[attr]
+
+
+    def color(self):
+        return consts.name_to_color[self.name.split()[-1]]
+
+
+    def id(self):
+        return "{}_{}_{}".format(self.color(), caps_set_code(self.set), self.collector_number)
+
+
+    def image_fname(self):
+        return "{}.jpg".format(self.id())
+
+
+    def download_image(self):
+        url = self.image_uris["normal"]
+        fname = os.path.join(consts.image_download_dir, self.image_fname())
+        print "{} -> {}".format(url, fname)
+
+        with session.get(url, stream=True) as r:
+            with open(fname, "wb") as f:
+                for chunk in r.iter_content(chunk_size=1024):
+                    f.write(chunk)
+
+
+
+class CardSet (object):
+    def __init__(self, raw):
+        self.raw = raw
+
+
+    def __getattr__(self, attr):
+        return self.raw[attr]
+
+
+    def __str__(self):
+        return "CardSet<{}>".format(self.code)
+
+
+    def group(self):
+        return consts.set_type_to_group[self.set_type]
+
 
 
 def load_data(fname, update_function, ask_for_update):
@@ -316,19 +439,22 @@ def load_data(fname, update_function, ask_for_update):
 def load_cards(ask_for_update=True):
     """Load card data"""
     cards = load_data(consts.cards_fname, get_cards, ask_for_update)
-    for card in cards["data"]:
-        card["collector_number"] = card["collector_number"].encode("utf-8")
+    for i,card in enumerate(cards["data"]):
+        cards["data"][i] = Card(card)
     return cards
 
 
 def load_sets(ask_for_update=True):
     """Load set data"""
-    return load_data(consts.sets_fname, get_sets, ask_for_update)
+    sets = load_data(consts.sets_fname, get_sets, ask_for_update)
+    for set_code in sets["data"]:
+        sets["data"][set_code] = CardSet(sets["data"][set_code])
+    return sets
 
 
 def save_data(data, fname):
     with open(fname, "w") as f:
-        json.dump(data, f, sort_keys=True, indent=2)
+        json.dump(data, f, sort_keys=True, indent=2, default=lambda x: x.raw)
     print "Saved data to {}".format(fname)
 
 
@@ -358,8 +484,6 @@ def get_cards():
         for card in j["data"]:
             for field in consts.ignored_card_fields:
                 del card[field]
-
-            #card["collector_number"] = card["collector_number"].encode("utf-8")
 
             cards["data"].append(card)
 
@@ -412,7 +536,7 @@ def download_card_images(cards):
     missing_images = []
 
     for i,card in enumerate(cards["data"]):
-        if os.path.exists(os.path.join(consts.image_download_dir, card_image_fname(card))):
+        if os.path.exists(os.path.join(consts.image_download_dir, card.image_fname())):
             existing_images.append(i)
         else:
             missing_images.append(i)
@@ -427,30 +551,23 @@ def download_card_images(cards):
             download_images.sort()
 
     for i in download_images:
-        download_card_image(cards["data"][i])
-
-
-def download_card_image(card):
-    url = card["image_uris"]["normal"]
-    fname = os.path.join(consts.image_download_dir, card_image_fname(card))
-    print "{} -> {}".format(url, fname)
-
-    with session.get(url, stream=True) as r:
-        with open(fname, "wb") as f:
-            for chunk in r.iter_content(chunk_size=1024):
-                f.write(chunk)
+        cards["data"][i].download_image()
 
 
 def build_card_sheets(cards):
+    do_update = raw_input("(Re)build card sheets?: [y/N]")
+    if not (len(do_update) and do_update[0] == "y"):
+        return
+
     mkdir_if_not_exists(consts.sheets_dir)
 
-    with Image.open(os.path.join(consts.image_download_dir, card_image_fname(cards["data"][0]))) as card_im:
+    with Image.open(os.path.join(consts.image_download_dir, (cards["data"][0]).image_fname())) as card_im:
         card_width = int(consts.scaled_width)
         card_height = int(consts.scaled_width * card_im.height / card_im.width)
 
     card_colors = {c:[] for c in consts.colors}
     for card in reversed(cards["data"]):
-        color = card_color(card)
+        color = card.color()
         card_colors[color].append(card)
 
     coords = []
@@ -480,7 +597,7 @@ def build_card_sheets(cards):
 
             for j,card in enumerate(card_colors[color]):
                 i = j + 1
-                card_fname = os.path.join(consts.image_download_dir, card_image_fname(card))
+                card_fname = os.path.join(consts.image_download_dir, card.image_fname())
 
                 x_card_offset = i %  sheet_width
                 y_card_offset = i // sheet_width
@@ -488,7 +605,7 @@ def build_card_sheets(cards):
                 x_pixel_offset = x_card_offset * card_width
                 y_pixel_offset = y_card_offset * card_height
 
-                coords.append((card_code(card), x_pixel_offset, y_pixel_offset))
+                coords.append((card.id(), x_pixel_offset, y_pixel_offset))
 
                 with Image.open(card_fname) as card_im:
                     scaled_height = consts.scaled_width * card_im.height / card_im.width
@@ -498,7 +615,7 @@ def build_card_sheets(cards):
             im.save(sheet_fname, quality=consts.jpeg_quality, optimize=True)
 
         for c in coords:
-            f.write(consts.sheet_css.card.format(card_code=c[0], x_offset=c[1], y_offset=c[2]))
+            f.write(consts.sheet_css.card.format(card_id=c[0], x_offset=c[1], y_offset=c[2]))
 
 
 def generate_land_html(cards, sets):
@@ -518,7 +635,7 @@ def generate_land_html(cards, sets):
             set_info = {
                 "set_symbol" : set_symbol(set_code),
                 "set_code"   : caps_set_code(set_code),
-                "set_title"  : sets["data"][set_code]["name"]
+                "set_title"  : sets["data"][set_code].name
             }
 
             toc  += consts.land_html.toc_entry.format(**set_info)
@@ -526,7 +643,7 @@ def generate_land_html(cards, sets):
 
             for color in consts.colors:
                 for card in organized_cards[set_code][color]:
-                    body += consts.land_html.card.format(card_code=card_code(card), alt=card_code(card).replace("_"," "), color=color.lower())
+                    body += consts.land_html.card.format(card_id=card.id(), alt=card.id().replace("_"," "), color=color.lower())
                     total += 1
             body += consts.land_html.set_end
 
@@ -542,7 +659,7 @@ def generate_land_html(cards, sets):
 
 
 def generate_placeholders(cards, sets):
-    placeholders = []
+    placeholders = {color : {group[0] : [] for group in consts.group_names_and_order} for color in consts.colors}
 
     organized_cards = cards_by_set_and_color(cards)
 
@@ -552,37 +669,113 @@ def generate_placeholders(cards, sets):
                 continue
 
             ph = {
-                "color" : color,
-                "set_code" : set_code,
-                "set_name" : sets["data"][set_code]["name"],
-                "numbers" : [c["collector_number"] for c in organized_cards[set_code][color]]
+                "color"        : color,
+                "group"        : sets["data"][set_code].group(),
+                "set_code"     : set_code,
+                "set_name"     : sets["data"][set_code].name,
+                "release_date" : sets["data"][set_code].released_at,
+                "numbers"      : [c.collector_number for c in organized_cards[set_code][color]]
             }
-            placeholders.append(ph)
+            group = sets["data"][set_code].group()
+            placeholders[color][group].append(ph)
+
+    un_c_placeholders = list(itertools.chain.from_iterable([placeholders[color]["un_set"] for color in consts.colors] + [placeholders["C"][group[0]] for group in consts.group_names_and_order]))
+    placeholders["un_c"] = un_c_placeholders
 
     return placeholders
 
 
 def generate_placeholders_html(placeholders):
-    body = consts.placeholder_html.page_start
-    n = 0
+    for color in consts.colors:
+        if color == "C":
+            continue
+
+        for group in consts.group_names_and_order:
+            if group[0] == "un_set":
+                continue
+
+            pl = placeholders[color][group[0]]
+            if len(pl):
+                generate_placeholders_html_document(pl, consts.placeholders_html_fname.format(color, group[0]))
+
+    # process un-sets and colorless separately on one document
+    generate_placeholders_html_document(placeholders["un_c"], consts.un_c_placeholders_fname)
+
+    # generate another document with all placeholders
+    all_placeholders = list(itertools.chain.from_iterable([placeholders[color][group[0]] for color in consts.colors for group in consts.group_names_and_order]))
+    generate_placeholders_html_document(all_placeholders, consts.placeholders_all_fname)
+
+
+def generate_placeholders_html_document(placeholders, fname):
+    body = ""
 
     for ph in placeholders:
         body += "\n" + consts.placeholder_html.card.format(
-            card_name=consts.color_to_name[ph["color"]],
-            set_symbol=set_symbol(ph["set_code"]),
-            set_name=ph["set_name"],
-            set_code=caps_set_code(ph["set_code"]),
-            card_numbers=", ".join(ph["numbers"])
+            card_name    = consts.color_to_name[ph["color"]],
+            group_name   = group_name(ph["group"]),
+            set_symbol   = set_symbol(ph["set_code"]),
+            set_name     = ph["set_name"],
+            set_code     = caps_set_code(ph["set_code"]),
+            release_date = ph["release_date"],
+            card_numbers = ", ".join(ph["numbers"])
         )
-        n += 1
-        if n % consts.placeholder_html.cards_per_page == 0:
-            body += consts.placeholder_html.page_end + consts.placeholder_html.page_start
-
-    body += consts.placeholder_html.page_end
 
     html = consts.placeholder_html.header + body + consts.placeholder_html.footer
 
-    with open(consts.placeholders_html_fname, "w") as f:
+    mkdir_if_not_exists(consts.placeholders_html_dir)
+    output_path = os.path.join(consts.placeholders_html_dir, fname)
+    with open(output_path, "w") as f:
+        f.write(html)
+
+
+def generate_index_html(placeholders):
+    html = consts.index_html.header
+
+    placeholders_path = os.path.join(consts.placeholders_html_dir, consts.placeholders_all_fname)
+    count = sum(len(placeholders[color][group[0]]) for color in consts.colors for group in consts.group_names_and_order)
+    page_count = math.ceil(count / consts.placeholder_html.cards_per_page)
+    html += consts.index_html.placeholder_all.format(placeholders_path=placeholders_path, count=count, page_count=page_count)
+
+    html += consts.index_html.placeholder_table_start
+    html += consts.index_html.placeholder_header_start
+
+    for group in consts.group_names_and_order:
+        if group[0] == "un_set":
+            continue
+        html += consts.index_html.placeholder_header_cell.format(group_name=group[1].replace(" ","<br>"))
+
+    html += consts.index_html.placeholder_header_end
+
+    html += consts.index_html.placeholder_tbody_start
+
+    for color in consts.colors:
+        if color == "C":
+            continue
+
+        html += consts.index_html.placeholder_row_start.format(color_name=consts.color_names[color])
+
+        for group in consts.group_names_and_order:
+            if group[0] == "un_set":
+                continue
+
+            placeholders_path = os.path.join(consts.placeholders_html_dir, consts.placeholders_html_fname.format(color, group[0]))
+            count = len(placeholders[color][group[0]])
+            page_count = math.ceil(count / consts.placeholder_html.cards_per_page)
+            html += consts.index_html.placeholder_cell.format(placeholders_path=placeholders_path, count=count, page_count=page_count)
+
+        html += consts.index_html.placeholder_row_end
+
+    html += consts.index_html.placeholder_tbody_end
+    html += consts.index_html.placeholder_table_end
+
+    un_c_placeholders_path = os.path.join(consts.placeholders_html_dir, consts.un_c_placeholders_fname)
+    un_c_count = len(placeholders["un_c"])
+    page_count = math.ceil(count / consts.placeholder_html.cards_per_page)
+    html += consts.index_html.placeholder_un_c.format(un_c_placeholders_path=un_c_placeholders_path, un_c_count=un_c_count, page_count=page_count)
+
+    html += consts.index_html.footer
+
+    with open(consts.index_fname, "w") as f:
         f.write(html)
 
 
@@ -591,9 +784,8 @@ def find_invalid_sets(sets):
     result = []
     for set_code in sorted(sets["data"].keys()):
         s = sets["data"][set_code]
-        if s["digital"] or s["set_type"] == "memorabilia":
-            #print (s["code"], s["name"], s["digital"], s["set_type"])
-            result.append(s["code"])
+        if s.digital or s.set_type == "memorabilia":
+            result.append(s.code)
     return set(result)
 
 
@@ -603,11 +795,11 @@ def prune_invalid_cards(cards, sets):
     inv = find_invalid_sets(sets)
 
     for card in cards["data"]:
-        if card["set"] in inv:
-            print "{} {} #{}".format(card["set"], card["name"], card["collector_number"])
+        if card.set in inv:
+            print "{} {} #{}".format(card.set, card.name, card.collector_number)
 
     count_before = len(cards["data"])
-    cards["data"][:] = itertools.ifilter(lambda c: c["set"] not in inv, cards["data"])
+    cards["data"][:] = itertools.ifilter(lambda c: c.set not in inv, cards["data"])
     if len(cards["data"]) != count_before:
         print "WARNING: {} invalid cards were detected and removed from the card list".format(count_before - len(cards["data"]))
 
@@ -636,13 +828,13 @@ def prune_unused_sets(cards, sets):
 def fix_missing_release_dates(sets):
     """Modifies the input param to add release dates to sets that are missing them"""
     for set_code in sets["data"]:
-        if "released_at" not in sets["data"][set_code]:
+        if "released_at" not in sets["data"][set_code].raw:
             if set_code in consts.missing_release_dates:
-                sets["data"][set_code]["released_at"] = consts.missing_release_dates[set_code]
+                sets["data"][set_code].raw["released_at"] = consts.missing_release_dates[set_code]
             else:
                 print "WARNING: Set '{}' has no release date and is not in missing_release_dates".format(set_code)
         elif set_code in consts.missing_release_dates:
-            print "WARNING: Set '{}' has a release date ({}) and is in missing_release_dates ({})".format(set_code, sets["data"][set_code]["released_at"], consts.missing_release_dates[set_code])
+            print "WARNING: Set '{}' has a release date ({}) and is in missing_release_dates ({})".format(set_code, sets["data"][set_code].released_at, consts.missing_release_dates[set_code])
 
     return sets
 
@@ -651,7 +843,7 @@ def find_card_sets(cards):
     """Return a set() of mtg sets that we have cards of"""
     result = set()
     for card in cards["data"]:
-        result.add(card["set"])
+        result.add(card.set)
     return result
 
 
@@ -660,15 +852,15 @@ def cards_by_set_and_color(cards):
     result = {}
 
     for card in cards["data"]:
-        color = card_color(card)
-        set_code = card["set"]
+        color = card.color()
+        set_code = card.set
         if set_code not in result:
             result[set_code] = {c:[] for c in consts.colors}
         result[set_code][color].append(card)
 
     for set_code in result:
         for color in result[set_code]:
-            result[set_code][color].sort(key=lambda card: [(int(group) if group.isdigit() else group) for group in re.split("(\d+)", card["collector_number"])])
+            result[set_code][color].sort(key=lambda card: [(int(group) if group.isdigit() else group) for group in re.split("(\d+)", card.collector_number)])
 
     return result
 
@@ -687,28 +879,20 @@ def set_symbol(set_code):
         return set_code
 
 
-def card_code(card):
-    return "{}_{}_{}".format(card_color(card), caps_set_code(card["set"]), card["collector_number"])
-
-
-def card_image_fname(card):
-    return "{}.jpg".format(card_code(card))
-
-
-def card_color(card):
-    return consts.name_to_color[card["name"].split()[-1]]
+def group_name(group):
+    return dict(consts.group_names_and_order)[group]
 
 
 def set_order(sets, group=None):
     return [
-        s["code"]
+        s.code
         for s
         in sorted(
             sets["data"].values(),
-            key=lambda x: x["released_at"],
+            key=lambda x: x.released_at,
             reverse=True
         )
-        if (consts.set_type_to_group[s["set_type"]] == group or group is None)
+        if (consts.set_type_to_group[s.set_type] == group or group is None)
     ]
 
 
@@ -746,63 +930,9 @@ def write_percentage(i, total, prefix=""):
     sys.stdout.flush()
 
 
-def _set_symbol_test(sets):
-    with open("symbol-test.html", "w") as f:
-        f.write("""<!DOCTYPE html>
-            <html>
-                <head>
-                    <meta charset="utf-8">
-                    <title>Symbol Test</title>
-                    <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css" />
-                </head>
-                <body>
-                    <ul>""")
-        for s in sorted(sets["data"].keys()):
-            f.write('<li><i class="ss ss-{}"></i> {} {}</li>'.format(set_symbol(s), caps_set_code(s), sets["data"][s]["name"]))
-        f.write("""</ul>
-                </body>
-            </html>""")
-
-
-def _set_code_translation_table(sets):
-    import cPickle as pickle
-    with open("../titles.pickle") as f:
-        titles = pickle.load(f)
-
-    diff = {}
-    for code in titles:
-        diff[titles[code]] = {"old":code}
-    for s in sets["data"].values():
-        if s["name"] in diff:
-            diff[s["name"]]["new"] = caps_set_code(s["code"])
-        else:
-            diff[s["name"]] = {"new": caps_set_code(s["code"])}
-    to_del = []
-    for name in diff:
-        if "new" in diff[name] and "old" in diff[name] and diff[name]["new"] == diff[name]["old"]:
-            to_del.append(name)
-    for name in to_del:
-        del diff[name]
-
-    print "{:6}  ->  {:6}  {}".format("old", "new", "name")
-    for name in sorted(diff.keys()):
-        print "{:6}  ->  {:6}  {}".format(diff[name]["old"] if "old" in diff[name] else "", diff[name]["new"] if "new" in diff[name] else "", name)
-
-
-def _set_types(sets):
-    pp(set([x["set_type"] for x in sets["data"].values()]))
-
-    t = {}
-    for s in sets["data"].values():
-        if s["set_type"] not in t:
-            t[s["set_type"]] = []
-        t[s["set_type"]].append(caps_set_code(s["code"]))
-    pp(t)
-
-
 def main():
-    cards = load_cards()
     sets = load_sets()
+    cards = load_cards()
 
     cards = prune_invalid_cards(cards, sets)
     sets = prune_unused_sets(cards, sets)
@@ -816,6 +946,8 @@ def main():
 
     placeholders = generate_placeholders(cards, sets)
     generate_placeholders_html(placeholders)
+
+    generate_index_html(placeholders)
 
 
 if __name__ == "__main__":

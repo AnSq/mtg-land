@@ -1,0 +1,26 @@
+body {
+    font-family: "Trebuchet MS", sans-serif;
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 4px;
+    text-align: center;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #eee;
+}
+
+tr > *:not(:first-of-type) {
+    border-left: 1px solid black;
+}
+
+.page_count {
+    font-size: 75%;
+}

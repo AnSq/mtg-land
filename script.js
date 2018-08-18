@@ -259,20 +259,9 @@ function toc_entry_click(target) {
 
 
 function reset_button() {
-    var counters = document.getElementsByClassName("checked");
-    for (var i = 0; i < counters.length; i++) {
-        counters[i].innerHTML = 0;
-    }
-
-    var complete = document.getElementsByClassName("complete");
-    for (var i = complete.length-1; i >= 0; i--) {
-        complete[i].classList.remove("complete");
-    }
-
-    var meters = document.getElementsByClassName("meter");
-    for (var i = 0; i < meters.length; i++) {
-        meters[i].style.height = 0;
-    }
+    $(".checked").html("0");
+    $(".complete").removeClass("complete");
+    $(".meter").css("height", 0);
 }
 
 
