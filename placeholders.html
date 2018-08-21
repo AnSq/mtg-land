@@ -14,68 +14,68 @@
                 <thead>
                     <tr>
                         <td></td>
-                        <th scope="col">Standard</th>
-                        <th scope="col">Special<br>Formats</th>
-                        <th scope="col">Duel<br>Decks</th>
-                        <th scope="col">Promos</th>
-                        <th scope="col">Un-Sets</th>
-                        <th scope="col">Other</th>
+                        <th scope="col"><button type="button" id="standard" name="standard">Standard</button></th>
+                        <th scope="col"><button type="button" id="special_format" name="special_format">Special<br>Formats</button></th>
+                        <th scope="col"><button type="button" id="duel_deck" name="duel_deck">Duel<br>Decks</button></th>
+                        <th scope="col"><button type="button" id="promo" name="promo">Promos</button></th>
+                        <th scope="col"><button type="button" id="un_set" name="un_set">Un-Sets</button></th>
+                        <th scope="col"><button type="button" id="other" name="other">Other</button></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row">White</th>
-                        <td><label><input type="checkbox" id="W_standard" name="W_standard" checked></label></td>
-                        <td><label><input type="checkbox" id="W_special_format" name="W_special_format" checked></label></td>
-                        <td><label><input type="checkbox" id="W_duel_deck" name="W_duel_deck" checked></label></td>
-                        <td><label><input type="checkbox" id="W_promo" name="W_promo" checked></label></td>
-                        <td><label><input type="checkbox" id="W_un_set" name="W_un_set" checked></label></td>
-                        <td><label><input type="checkbox" id="W_other" name="W_other" checked></label></td>
+                        <th scope="row"><button type="button" id="W" name="W">White</button></th>
+                        <td><label><input type="checkbox" id="W_standard" name="W_standard" class="W standard" checked></label></td>
+                        <td><label><input type="checkbox" id="W_special_format" name="W_special_format" class="W special_format" checked></label></td>
+                        <td><label><input type="checkbox" id="W_duel_deck" name="W_duel_deck" class="W duel_deck" checked></label></td>
+                        <td><label><input type="checkbox" id="W_promo" name="W_promo" class="W promo" checked></label></td>
+                        <td><label><input type="checkbox" id="W_un_set" name="W_un_set" class="W un_set" checked></label></td>
+                        <td><label><input type="checkbox" id="W_other" name="W_other" class="W other" checked></label></td>
                     </tr>
                     <tr>
-                        <th scope="row">Blue</th>
-                        <td><label><input type="checkbox" id="U_standard" name="U_standard" checked></label></td>
-                        <td><label><input type="checkbox" id="U_special_format" name="U_special_format" checked></label></td>
-                        <td><label><input type="checkbox" id="U_duel_deck" name="U_duel_deck" checked></label></td>
-                        <td><label><input type="checkbox" id="U_promo" name="U_promo" checked></label></td>
-                        <td><label><input type="checkbox" id="U_un_set" name="U_un_set" checked></label></td>
-                        <td><label><input type="checkbox" id="U_other" name="U_other" checked></label></td>
+                        <th scope="row"><button type="button" id="U" name="U">Blue</button></th>
+                        <td><label><input type="checkbox" id="U_standard" name="U_standard" class="U standard" checked></label></td>
+                        <td><label><input type="checkbox" id="U_special_format" name="U_special_format" class="U special_format" checked></label></td>
+                        <td><label><input type="checkbox" id="U_duel_deck" name="U_duel_deck" class="U duel_deck" checked></label></td>
+                        <td><label><input type="checkbox" id="U_promo" name="U_promo" class="U promo" checked></label></td>
+                        <td><label><input type="checkbox" id="U_un_set" name="U_un_set" class="U un_set" checked></label></td>
+                        <td><label><input type="checkbox" id="U_other" name="U_other" class="U other" checked></label></td>
                     </tr>
                     <tr>
-                        <th scope="row">Black</th>
-                        <td><label><input type="checkbox" id="B_standard" name="B_standard" checked></label></td>
-                        <td><label><input type="checkbox" id="B_special_format" name="B_special_format" checked></label></td>
-                        <td><label><input type="checkbox" id="B_duel_deck" name="B_duel_deck" checked></label></td>
-                        <td><label><input type="checkbox" id="B_promo" name="B_promo" checked></label></td>
-                        <td><label><input type="checkbox" id="B_un_set" name="B_un_set" checked></label></td>
-                        <td><label><input type="checkbox" id="B_other" name="B_other" checked></label></td>
+                        <th scope="row"><button type="button" id="B" name="B">Black</button></th>
+                        <td><label><input type="checkbox" id="B_standard" name="B_standard" class="B standard" checked></label></td>
+                        <td><label><input type="checkbox" id="B_special_format" name="B_special_format" class="B special_format" checked></label></td>
+                        <td><label><input type="checkbox" id="B_duel_deck" name="B_duel_deck" class="B duel_deck" checked></label></td>
+                        <td><label><input type="checkbox" id="B_promo" name="B_promo" class="B promo" checked></label></td>
+                        <td><label><input type="checkbox" id="B_un_set" name="B_un_set" class="B un_set" checked></label></td>
+                        <td><label><input type="checkbox" id="B_other" name="B_other" class="B other" checked></label></td>
                     </tr>
                     <tr>
-                        <th scope="row">Red</th>
-                        <td><label><input type="checkbox" id="R_standard" name="R_standard" checked></label></td>
-                        <td><label><input type="checkbox" id="R_special_format" name="R_special_format" checked></label></td>
-                        <td><label><input type="checkbox" id="R_duel_deck" name="R_duel_deck" checked></label></td>
-                        <td><label><input type="checkbox" id="R_promo" name="R_promo" checked></label></td>
-                        <td><label><input type="checkbox" id="R_un_set" name="R_un_set" checked></label></td>
-                        <td><label><input type="checkbox" id="R_other" name="R_other" checked></label></td>
+                        <th scope="row"><button type="button" id="R" name="R">Red</button></th>
+                        <td><label><input type="checkbox" id="R_standard" name="R_standard" class="R standard" checked></label></td>
+                        <td><label><input type="checkbox" id="R_special_format" name="R_special_format" class="R special_format" checked></label></td>
+                        <td><label><input type="checkbox" id="R_duel_deck" name="R_duel_deck" class="R duel_deck" checked></label></td>
+                        <td><label><input type="checkbox" id="R_promo" name="R_promo" class="R promo" checked></label></td>
+                        <td><label><input type="checkbox" id="R_un_set" name="R_un_set" class="R un_set" checked></label></td>
+                        <td><label><input type="checkbox" id="R_other" name="R_other" class="R other" checked></label></td>
                     </tr>
                     <tr>
-                        <th scope="row">Green</th>
-                        <td><label><input type="checkbox" id="G_standard" name="G_standard" checked></label></td>
-                        <td><label><input type="checkbox" id="G_special_format" name="G_special_format" checked></label></td>
-                        <td><label><input type="checkbox" id="G_duel_deck" name="G_duel_deck" checked></label></td>
-                        <td><label><input type="checkbox" id="G_promo" name="G_promo" checked></label></td>
-                        <td><label><input type="checkbox" id="G_un_set" name="G_un_set" checked></label></td>
-                        <td><label><input type="checkbox" id="G_other" name="G_other" checked></label></td>
+                        <th scope="row"><button type="button" id="G" name="G">Green</button></th>
+                        <td><label><input type="checkbox" id="G_standard" name="G_standard" class="G standard" checked></label></td>
+                        <td><label><input type="checkbox" id="G_special_format" name="G_special_format" class="G special_format" checked></label></td>
+                        <td><label><input type="checkbox" id="G_duel_deck" name="G_duel_deck" class="G duel_deck" checked></label></td>
+                        <td><label><input type="checkbox" id="G_promo" name="G_promo" class="G promo" checked></label></td>
+                        <td><label><input type="checkbox" id="G_un_set" name="G_un_set" class="G un_set" checked></label></td>
+                        <td><label><input type="checkbox" id="G_other" name="G_other" class="G other" checked></label></td>
                     </tr>
                     <tr>
-                        <th scope="row">Colorless</th>
-                        <td><label><input type="checkbox" id="C_standard" name="C_standard" checked></label></td>
-                        <td><label><input type="checkbox" id="C_special_format" name="C_special_format" disabled></label></td>
-                        <td><label><input type="checkbox" id="C_duel_deck" name="C_duel_deck" disabled></label></td>
-                        <td><label><input type="checkbox" id="C_promo" name="C_promo" disabled></label></td>
-                        <td><label><input type="checkbox" id="C_un_set" name="C_un_set" disabled></label></td>
-                        <td><label><input type="checkbox" id="C_other" name="C_other" disabled></label></td>
+                        <th scope="row"><button type="button" id="C" name="C">Colorless</button></th>
+                        <td><label><input type="checkbox" id="C_standard" name="C_standard" class="C standard" checked></label></td>
+                        <td><label><input type="checkbox" id="C_special_format" name="C_special_format" class="C special_format" disabled></label></td>
+                        <td><label><input type="checkbox" id="C_duel_deck" name="C_duel_deck" class="C duel_deck" disabled></label></td>
+                        <td><label><input type="checkbox" id="C_promo" name="C_promo" class="C promo" disabled></label></td>
+                        <td><label><input type="checkbox" id="C_un_set" name="C_un_set" class="C un_set" disabled></label></td>
+                        <td><label><input type="checkbox" id="C_other" name="C_other" class="C other" disabled></label></td>
                     </tr>
                 </tbody>
             </table>

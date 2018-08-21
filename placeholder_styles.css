@@ -10,10 +10,11 @@ form {
     margin-bottom: 20px;
 }
 
-label {
+label, button {
     display: inline-block;
     width: 100%;
     height: 100%;
+    padding: 0;
 }
 
 table {
@@ -31,6 +32,10 @@ tr > :not(:first-of-type) {
 
 th, td {
     padding: 4px;
+}
+
+button {
+    font-weight: bold;
 }
 
 p {

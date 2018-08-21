@@ -284,7 +284,7 @@ consts.placeholder_html.thead_start = """\
                         <td></td>
 """
 consts.placeholder_html.header_cell = """\
-                        <th scope="col">{group_name}</th>
+                        <th scope="col"><button type="button" id="{group}" name="{group}">{group_name}</button></th>
 """
 consts.placeholder_html.thead_end = """\
                     </tr>
@@ -295,10 +295,10 @@ consts.placeholder_html.tbody_start = """\
 """
 consts.placeholder_html.table_row_start = """\
                     <tr>
-                        <th scope="row">{color_name}</th>
+                        <th scope="row"><button type="button" id="{color}" name="{color}">{color_name}</button></th>
 """
 consts.placeholder_html.table_cell = """\
-                        <td><label><input type="checkbox" id="{checkbox_id}" name="{checkbox_id}" {checked_disabled}></label></td>
+                        <td><label><input type="checkbox" id="{checkbox_id}" name="{checkbox_id}" class="{color} {group}" {checked_disabled}></label></td>
 """
 consts.placeholder_html.table_row_end = """\
                     </tr>
@@ -664,16 +664,16 @@ def generate_placeholders_html(placeholders):
 
     form += consts.placeholder_html.thead_start
     for group in consts.group_names_and_order:
-        form += consts.placeholder_html.header_cell.format(group_name=group[1].replace(" ","<br>"))
+        form += consts.placeholder_html.header_cell.format(group_name=group[1].replace(" ","<br>"), group=group[0])
     form += consts.placeholder_html.thead_end
 
     form += consts.placeholder_html.tbody_start
     for color in consts.colors:
-        form += consts.placeholder_html.table_row_start.format(color_name=consts.color_names[color])
+        form += consts.placeholder_html.table_row_start.format(color_name=consts.color_names[color], color=color)
         for group in consts.group_names_and_order:
             checkbox_id = "{}_{}".format(color, group[0])
             checked_disabled = "checked" if len(placeholders[color][group[0]]) else "disabled"
-            form += consts.placeholder_html.table_cell.format(checkbox_id=checkbox_id, checked_disabled=checked_disabled)
+            form += consts.placeholder_html.table_cell.format(checkbox_id=checkbox_id, color=color, group=group[0], checked_disabled=checked_disabled)
         form += consts.placeholder_html.table_row_end
     form += consts.placeholder_html.tbody_end
 
