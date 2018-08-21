@@ -34,14 +34,9 @@ consts.sets_endpoint = "/sets"
 consts.cards_fname = "cards.json"
 consts.sets_fname = "sets.json"
 consts.image_download_dir = "images_dl"
-consts.image_scaled_dir = "images_scaled"
 consts.sheets_dir = "card_sheets"
 consts.cards_css_fname = "cards.css"
-consts.placeholders_html_dir = "placeholders"
-consts.placeholders_html_fname = "{}_{}.html"
-consts.un_c_placeholders_fname = "ALL_un_set+C.html"
-consts.placeholders_all_fname = "all_placeholders.html"
-consts.index_fname = "index.html"
+consts.placeholders_html_fname = "placeholders.html"
 
 consts.scaled_width = 140
 consts.jpeg_quality = 85
@@ -143,7 +138,8 @@ consts.color_names = {
     "U" : "Blue",
     "B" : "Black",
     "R" : "Red",
-    "G" : "Green"
+    "G" : "Green",
+    "C" : "Colorless"
 }
 consts.set_type_to_group = {
     "core"             : "standard",
@@ -267,16 +263,55 @@ consts.placeholder_html.header = """\
     <head>
         <meta charset="utf-8">
         <title>MTG Land Placeholder Cards</title>
-        <link href="../placeholder_styles.css" rel="stylesheet" />
+        <link href="placeholder_styles.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css" />
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="placeholder_script.js"></script>
     </head>
-    <body>"""
+    <body>
+"""
 consts.placeholder_html.footer = """
     </body>
 </html>
 """
+consts.placeholder_html.form_header = """\
+        <form name="form" id="form">
+            <table>
+"""
+consts.placeholder_html.thead_start = """\
+                <thead>
+                    <tr>
+                        <td></td>
+"""
+consts.placeholder_html.header_cell = """\
+                        <th scope="col">{group_name}</th>
+"""
+consts.placeholder_html.thead_end = """\
+                    </tr>
+                </thead>
+"""
+consts.placeholder_html.tbody_start = """\
+                <tbody>
+"""
+consts.placeholder_html.table_row_start = """\
+                    <tr>
+                        <th scope="row">{color_name}</th>
+"""
+consts.placeholder_html.table_cell = """\
+                        <td><label><input type="checkbox" id="{checkbox_id}" name="{checkbox_id}" {checked_disabled}></label></td>
+"""
+consts.placeholder_html.table_row_end = """\
+                    </tr>
+"""
+consts.placeholder_html.tbody_end = """\
+                </tbody>
+"""
+consts.placeholder_html.form_footer = """\
+            </table>
+        </form>
+"""
 consts.placeholder_html.card = """\
-        <div class="card">
+        <div class="card {color}_{group_id}">
             <div class="card_1">
                 <div class="card_body">
                     <p class="type">{card_name}</p>
@@ -290,66 +325,8 @@ consts.placeholder_html.card = """\
                     <p class="range">{card_numbers}</p>
                 </div>
             </div>
-        </div>"""
-consts.placeholder_html.cards_per_page = 9
-
-consts.index_html = Consts()
-consts.index_html.header = """\
-<!DOCTYPE html>
-<html lang="en-US">
-    <head>
-        <meta charset="utf-8">
-        <title>MTG Basic Land</title>
-        <link href="index_styles.css" rel="stylesheet" />
-    </head>
-    <body>
-        <div>
-            <h1>MTG Basic Land</h1>
-            <ul>
-                <li><h2><a href="land">Basic Land</a></h2></li>
-                <li>Placeholders:
-"""
-consts.index_html.placeholder_all = '                    <strong>All Placeholders:</strong> <a href="{placeholders_path}">{count} cards <span class="page_count">({page_count:.0f} pages)</span></a>\n'
-consts.index_html.placeholder_table_start = '                    <table>\n'
-consts.index_html.placeholder_header_start = """\
-                        <thead>
-                            <tr>
-                                <td></td>
-"""
-consts.index_html.placeholder_header_cell = '                                <th scope="col">{group_name}</th>\n'
-consts.index_html.placeholder_header_end = """\
-                            </tr>
-                        </thead>
-"""
-consts.index_html.placeholder_tbody_start = '                        <tbody>\n'
-consts.index_html.placeholder_row_start = """\
-                            <tr>
-                                <th scope="row">{color_name}</th>
-"""
-consts.index_html.placeholder_cell = '                                <td><a href="{placeholders_path}">{count:.0f} cards<br><span class="page_count">({page_count:.0f} pages)</span></a></td>\n'
-consts.index_html.placeholder_row_end = '                            </tr>\n'
-consts.index_html.placeholder_tbody_end = '                        </tbody>\n'
-consts.index_html.placeholder_table_end = '                    </table>\n'
-consts.index_html.placeholder_un_c = '                    <strong>All Un-Sets and Colorless:</strong> <a href="{un_c_placeholders_path}">{un_c_count:.0f} cards <span class="page_count">({page_count:.0f} pages)</span></a>\n'
-consts.index_html.footer = """\
-                </li>
-                <li><a href="blanks">Blanks</a></li>
-                <li>Card Sheets:
-                    <ul>
-                        <li><a href="card_sheets/W.jpg">White</a></li>
-                        <li><a href="card_sheets/U.jpg">Blue</a></li>
-                        <li><a href="card_sheets/B.jpg">Black</a></li>
-                        <li><a href="card_sheets/R.jpg">Red</a></li>
-                        <li><a href="card_sheets/G.jpg">Green</a></li>
-                        <li><a href="card_sheets/C.jpg">Colorless</a></li>
-                    </ul>
-                </li>
-            </ul>
         </div>
-    </body>
-</html>
 """
-
 
 session = requests.Session()
 
@@ -555,7 +532,7 @@ def download_card_images(cards):
 
 
 def build_card_sheets(cards):
-    do_update = raw_input("(Re)build card sheets?: [y/N]")
+    do_update = raw_input("(Re)build card sheets? [y/N]: ")
     if not (len(do_update) and do_update[0] == "y"):
         return
 
@@ -679,38 +656,34 @@ def generate_placeholders(cards, sets):
             group = sets["data"][set_code].group()
             placeholders[color][group].append(ph)
 
-    un_c_placeholders = list(itertools.chain.from_iterable([placeholders[color]["un_set"] for color in consts.colors] + [placeholders["C"][group[0]] for group in consts.group_names_and_order]))
-    placeholders["un_c"] = un_c_placeholders
-
     return placeholders
 
 
 def generate_placeholders_html(placeholders):
+    form = consts.placeholder_html.form_header
+
+    form += consts.placeholder_html.thead_start
+    for group in consts.group_names_and_order:
+        form += consts.placeholder_html.header_cell.format(group_name=group[1].replace(" ","<br>"))
+    form += consts.placeholder_html.thead_end
+
+    form += consts.placeholder_html.tbody_start
     for color in consts.colors:
-        if color == "C":
-            continue
-
+        form += consts.placeholder_html.table_row_start.format(color_name=consts.color_names[color])
         for group in consts.group_names_and_order:
-            if group[0] == "un_set":
-                continue
+            checkbox_id = "{}_{}".format(color, group[0])
+            checked_disabled = "checked" if len(placeholders[color][group[0]]) else "disabled"
+            form += consts.placeholder_html.table_cell.format(checkbox_id=checkbox_id, checked_disabled=checked_disabled)
+        form += consts.placeholder_html.table_row_end
+    form += consts.placeholder_html.tbody_end
 
-            pl = placeholders[color][group[0]]
-            if len(pl):
-                generate_placeholders_html_document(pl, consts.placeholders_html_fname.format(color, group[0]))
+    form += consts.placeholder_html.form_footer
 
-    # process un-sets and colorless separately on one document
-    generate_placeholders_html_document(placeholders["un_c"], consts.un_c_placeholders_fname)
-
-    # generate another document with all placeholders
-    all_placeholders = list(itertools.chain.from_iterable([placeholders[color][group[0]] for color in consts.colors for group in consts.group_names_and_order]))
-    generate_placeholders_html_document(all_placeholders, consts.placeholders_all_fname)
-
-
-def generate_placeholders_html_document(placeholders, fname):
     body = ""
-
-    for ph in placeholders:
-        body += "\n" + consts.placeholder_html.card.format(
+    for ph in itertools.chain.from_iterable([placeholders[color][group[0]] for color in consts.colors for group in consts.group_names_and_order]):
+        body += consts.placeholder_html.card.format(
+            color        = ph["color"],
+            group_id     = ph["group"],
             card_name    = consts.color_to_name[ph["color"]],
             group_name   = group_name(ph["group"]),
             set_symbol   = set_symbol(ph["set_code"]),
@@ -720,62 +693,9 @@ def generate_placeholders_html_document(placeholders, fname):
             card_numbers = ", ".join(ph["numbers"])
         )
 
-    html = consts.placeholder_html.header + body + consts.placeholder_html.footer
+    html = consts.placeholder_html.header + form + body + consts.placeholder_html.footer
 
-    mkdir_if_not_exists(consts.placeholders_html_dir)
-    output_path = os.path.join(consts.placeholders_html_dir, fname)
-    with open(output_path, "w") as f:
-        f.write(html)
-
-
-def generate_index_html(placeholders):
-    html = consts.index_html.header
-
-    placeholders_path = os.path.join(consts.placeholders_html_dir, consts.placeholders_all_fname)
-    count = sum(len(placeholders[color][group[0]]) for color in consts.colors for group in consts.group_names_and_order)
-    page_count = math.ceil(count / consts.placeholder_html.cards_per_page)
-    html += consts.index_html.placeholder_all.format(placeholders_path=placeholders_path, count=count, page_count=page_count)
-
-    html += consts.index_html.placeholder_table_start
-    html += consts.index_html.placeholder_header_start
-
-    for group in consts.group_names_and_order:
-        if group[0] == "un_set":
-            continue
-        html += consts.index_html.placeholder_header_cell.format(group_name=group[1].replace(" ","<br>"))
-
-    html += consts.index_html.placeholder_header_end
-
-    html += consts.index_html.placeholder_tbody_start
-
-    for color in consts.colors:
-        if color == "C":
-            continue
-
-        html += consts.index_html.placeholder_row_start.format(color_name=consts.color_names[color])
-
-        for group in consts.group_names_and_order:
-            if group[0] == "un_set":
-                continue
-
-            placeholders_path = os.path.join(consts.placeholders_html_dir, consts.placeholders_html_fname.format(color, group[0]))
-            count = len(placeholders[color][group[0]])
-            page_count = math.ceil(count / consts.placeholder_html.cards_per_page)
-            html += consts.index_html.placeholder_cell.format(placeholders_path=placeholders_path, count=count, page_count=page_count)
-
-        html += consts.index_html.placeholder_row_end
-
-    html += consts.index_html.placeholder_tbody_end
-    html += consts.index_html.placeholder_table_end
-
-    un_c_placeholders_path = os.path.join(consts.placeholders_html_dir, consts.un_c_placeholders_fname)
-    un_c_count = len(placeholders["un_c"])
-    page_count = math.ceil(count / consts.placeholder_html.cards_per_page)
-    html += consts.index_html.placeholder_un_c.format(un_c_placeholders_path=un_c_placeholders_path, un_c_count=un_c_count, page_count=page_count)
-
-    html += consts.index_html.footer
-
-    with open(consts.index_fname, "w") as f:
+    with open(consts.placeholders_html_fname, "w") as f:
         f.write(html)
 
 
@@ -946,8 +866,6 @@ def main():
 
     placeholders = generate_placeholders(cards, sets)
     generate_placeholders_html(placeholders)
-
-    generate_index_html(placeholders)
 
 
 if __name__ == "__main__":
