@@ -175,9 +175,10 @@ consts.land_html.header = """\
     <head>
         <meta charset="utf-8">
         <title>MTG Basic Land</title>
-        <link href="styles.css" rel="stylesheet" />
-        <link href="cards.css" rel="stylesheet" />
-        <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css" />
+        <link href="/favicon.ico" rel="icon">
+        <link href="styles.css" rel="stylesheet">
+        <link href="cards.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="script.js"></script>
     </head>
@@ -263,8 +264,9 @@ consts.placeholder_html.header = """\
     <head>
         <meta charset="utf-8">
         <title>MTG Land Placeholder Cards</title>
-        <link href="placeholder_styles.css" rel="stylesheet" />
-        <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css" />
+        <link href="/favicon.ico" rel="icon">
+        <link href="placeholder_styles.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css">
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="placeholder_script.js"></script>
     </head>
