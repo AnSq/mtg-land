@@ -5,3 +5,4 @@
 images_dl/
 v1/
 !v1_to_v2_translations.json
+!requirements.txt
