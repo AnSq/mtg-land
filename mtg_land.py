@@ -15,320 +15,10 @@ import sys
 import math
 from PIL import Image
 
+import consts
+
 from pprint import pprint as pp
 
-
-class Consts (object):
-    """a plain object to store some stuff"""
-    pass
-
-
-consts = Consts()
-
-consts.time_format = "%Y-%m-%d %H:%M:%S"
-
-consts.api_root = "https://api.scryfall.com"
-consts.search_endpoint = "/cards/search"
-consts.sets_endpoint = "/sets"
-
-consts.cards_fname = "cards.json"
-consts.sets_fname = "sets.json"
-consts.image_download_dir = "images_dl"
-consts.sheets_dir = "card_sheets"
-consts.cards_css_fname = "cards.css"
-consts.placeholders_html_fname = "placeholders.html"
-
-consts.scaled_width = 140
-consts.jpeg_quality = 85
-consts.sheet_background_color = (0, 0, 0)
-
-consts.card_query = "t:basic in:paper unique:prints lang:en -is:digital -s:CED -s:CEI -s:PTC -border:gold -s:RQS"
-# RQS lands are indistinguishable from 4th edition
-
-consts.ignored_card_fields = (
-    "cmc",
-    "color_identity",
-    "colors",
-    "colorshifted",
-    "digital",
-    "futureshifted",
-    "lang",
-    "layout",
-    "legalities",
-    "mana_cost",
-    "multiverse_ids",
-    "object",
-    "oracle_id",
-    "oracle_text",
-    "oversized",
-    "prints_search_uri",
-    "purchase_uris",
-    "related_uris",
-    "reprint",
-    "reserved",
-    "rulings_uri",
-    "set_search_uri",
-    "timeshifted"
-)
-consts.ignored_set_fields = (
-    "object",
-    "search_uri"
-)
-consts.missing_release_dates = {
-    "cst":   "2006-07-21",
-    "j14":   "2014-08-00",
-    "pal00": "2000-00-00",
-    "pal01": "2001-00-00",
-    "pal02": "2002-00-00",
-    "pal03": "2003-00-00",
-    "pal04": "2004-00-00",
-    "pal05": "2005-00-00",
-    "pal06": "2006-00-00",
-    "pal99": "1999-00-00",
-    "palp":  "1998-09-00",
-    "parl":  "1996-00-00",
-    "pdgm":  "2013-04-27",
-    "pelp":  "2000-02-05",
-    "pgp17": "2017-10-00",
-    "pgpx":  "2018-00-00",
-    "pgru":  "1999-07-12",
-    "phuk":  "2006-00-00",
-    "pss2":  "2017-09-29",
-    "pss3":  "2018-07-13"
-}
-consts.set_symbol_translation = {
-    "cst"   : "ice",
-    "dd1"   : "evg",
-    "dvd"   : "ddc",
-    "gvl"   : "ddd",
-    "itp"   : "x2ps",
-    "j14"   : "pmei",
-    "jvc"   : "dd2",
-    "pal00" : "mmq",
-    "pal01" : "parl2",
-    "pal02" : "parl2",
-    "pal03" : "parl",
-    "pal04" : "parl",
-    "pal05" : "parl",
-    "pal06" : "parl",
-    "pal99" : "usg",
-    "palp"  : "papac",
-    "parl"  : "pmtg1",
-    "pdgm"  : "dgm",
-    "pelp"  : "peuro",
-    "pgp17" : "pmei",
-    "pgpx"  : "pmei",
-    "phuk"  : "psalvat05",
-    "pss2"  : "pmei",
-    "pss3"  : "pmei",
-    "sum"   : "psum",
-}
-consts.name_to_color = {
-    "Plains"   : "W",
-    "Island"   : "U",
-    "Swamp"    : "B",
-    "Mountain" : "R",
-    "Forest"   : "G",
-    "Wastes"   : "C"
-}
-consts.color_to_name = {v:k for k,v in consts.name_to_color.items()}
-consts.colors = "WUBRGC"
-consts.color_names = {
-    "W" : "White",
-    "U" : "Blue",
-    "B" : "Black",
-    "R" : "Red",
-    "G" : "Green",
-    "C" : "Colorless"
-}
-consts.set_type_to_group = {
-    "core"             : "standard",
-    "expansion"        : "standard",
-    "archenemy"        : "special_format",
-    "planechase"       : "special_format",
-    "draft_innovation" : "special_format",
-    "commander"        : "special_format",
-    "box"              : "other",
-    "starter"          : "other",
-    "premium_deck"     : "other",
-    "funny"            : "un_set",
-    "promo"            : "promo",
-    "duel_deck"        : "duel_deck",
-}
-consts.group_names_and_order = [
-    ("standard"       , "Standard"),
-    ("special_format" , "Special Formats"),
-    ("duel_deck"      , "Duel Decks"),
-    ("promo"          , "Promos"),
-    ("un_set"         , "Un-Sets"),
-    ("other"          , "Other"),
-]
-
-consts.sheet_css = Consts()
-consts.sheet_css.sheet = ".card.color_{color} .img {{background-size: {width}px {height}px;}}\n"
-consts.sheet_css.card = "#{card_id} + label > .img {{background-position: -{x_offset}px -{y_offset}px;}}\n"
-
-consts.land_html = Consts()
-consts.land_html.header = """\
-<!DOCTYPE html>
-<html lang="en-US">
-    <head>
-        <meta charset="utf-8">
-        <title>MTG Basic Land</title>
-        <link href="/favicon.ico" rel="icon">
-        <link href="styles.css" rel="stylesheet">
-        <link href="cards.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css">
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script src="script.js"></script>
-    </head>
-    <body>
-        <h1>MTG Basic Land</h1>
-        <form name="form" id="form">
-            <div id="buttons">
-                <input type="button" id="save" name="save" value="Save">
-                <input type="file" id="load" name="load" accept=".json">
-                <input type="reset" id="reset">
-                <span id="totalcount" class="count"><span class="checked">?</span> / <span class="total">?</span></span>
-            </div>
-            <div id="toc">
-                <h2>Table of Contents</h2>
-                {toc}
-            </div>
-            <div id="sets">
-"""
-consts.land_html.toc_group_header = """\
-                <div class="toc_group">
-                    <h3>{group_name}</h3>
-                    <ul>
-"""
-consts.land_html.toc_group_footer = """\
-                    </ul>
-                </div>
-"""
-consts.land_html.toc_entry = """\
-                        <li id="toc_{set_code}">
-                            <a href="#set_{set_code}" title="{set_title}">
-                                <div><i class="ss ss-{set_symbol}"></i></div>
-                                <div>{set_code}</div>
-                                <div class="count"><span class="checked">?</span>/<span class="total">?</span></div>
-                            </a>
-                            <div class="meter"></div>
-                        </li>
-"""
-consts.land_html.set_group_header = """\
-                <div class="group collapsible" id="group_{group_id}">
-                    <div class="collapsible_header">
-                        <h2>{group_name}</h2>
-                        <span class="toggle">▼</span>
-                        <a class="top_link" href="#">↑</a>
-                    </div>
-                    <div class="collapsible_content">
-"""
-consts.land_html.set_group_footer = """\
-                    </div>
-                </div>
-"""
-consts.land_html.set_title = """\
-                        <div class="set collapsible" id="set_{set_code}" data-title="{set_title}">
-                            <div class="collapsible_header">
-                                <h3 class="set_title"><i class="ss ss-{set_symbol}"></i> {set_code} - {set_title}</h3>
-                                <span class="toggle">▼</span>
-                                <span class="count"><span class="checked">?</span> / <span class="total">?</span></span>
-                                <a class="top_link" href="#">↑</a>
-                            </div>
-                            <div class="collapsible_content">
-"""
-consts.land_html.card = """\
-                                <div class="card color_{color}">
-                                    <input type="checkbox" id="{card_id}" name="{card_id}">
-                                    <label for="{card_id}"><span class="img"></span></label>
-                                    <span>{alt}</span>
-                                </div>
-"""
-consts.land_html.set_end = """\
-                            </div>
-                        </div>
-"""
-consts.land_html.footer = """\
-            </div>
-        </form>
-    </body>
-</html>
-"""
-
-consts.placeholder_html = Consts()
-consts.placeholder_html.header = """\
-<!DOCTYPE html>
-<html lang="en-US">
-    <head>
-        <meta charset="utf-8">
-        <title>MTG Land Placeholder Cards</title>
-        <link href="/favicon.ico" rel="icon">
-        <link href="placeholder_styles.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" rel="stylesheet" type="text/css">
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script src="placeholder_script.js"></script>
-    </head>
-    <body>
-"""
-consts.placeholder_html.footer = """
-    </body>
-</html>
-"""
-consts.placeholder_html.form_header = """\
-        <form name="form" id="form">
-            <table>
-"""
-consts.placeholder_html.thead_start = """\
-                <thead>
-                    <tr>
-                        <td></td>
-"""
-consts.placeholder_html.header_cell = """\
-                        <th scope="col"><button type="button" id="{group}" name="{group}">{group_name}</button></th>
-"""
-consts.placeholder_html.thead_end = """\
-                    </tr>
-                </thead>
-"""
-consts.placeholder_html.tbody_start = """\
-                <tbody>
-"""
-consts.placeholder_html.table_row_start = """\
-                    <tr>
-                        <th scope="row"><button type="button" id="{color}" name="{color}">{color_name}</button></th>
-"""
-consts.placeholder_html.table_cell = """\
-                        <td><label><input type="checkbox" id="{checkbox_id}" name="{checkbox_id}" class="{color} {group}" {checked_disabled}></label></td>
-"""
-consts.placeholder_html.table_row_end = """\
-                    </tr>
-"""
-consts.placeholder_html.tbody_end = """\
-                </tbody>
-"""
-consts.placeholder_html.form_footer = """\
-            </table>
-        </form>
-"""
-consts.placeholder_html.card = """\
-        <div class="card {color}_{group_id}">
-            <div class="card_1">
-                <div class="card_body">
-                    <p class="type">{card_name}</p>
-                    <div class="card_center">
-                        <p class="symbol"><i class="ss ss-{set_symbol}"></i></p>
-                        <p class="set">{set_code}</p>
-                        <p class="title">{set_name}</p>
-                        <p class="group">{group_name}</p>
-                        <p class="release_date">{release_date}</p>
-                    </div>
-                    <p class="range">{card_numbers}</p>
-                </div>
-            </div>
-        </div>
-"""
 
 session = requests.Session()
 
@@ -386,7 +76,23 @@ class CardSet (object):
 
 
 
-def load_data(fname, update_function, ask_for_update):
+class UpdateInfo (object):
+    def __init__(self):
+        self.old_size = 0
+        self.new_size = 0
+        self.updated = False
+
+
+    def __str__(self):
+        return "<old:{0.old_size}, new:{0.new_size}, updated:{0.updated}, diff:{1}>".format(self, self.diff())
+
+
+    def diff(self):
+        return self.new_size - self.old_size
+
+
+
+def load_data(fname, update_function, ask_for_update, update_info=None, force_update=False):
     """Load a data file if it exists, and prompt for update. If it doesn't exist, fetch it."""
 
     data = None
@@ -396,36 +102,45 @@ def load_data(fname, update_function, ask_for_update):
 
             data = json.load(f)
 
+            if update_info:
+                update_info.old_size = len(data["data"])
+
             updated = datetime.datetime.strptime(data["last_updated"], consts.time_format)
             now = time_now()
             days_since_update = (now - updated).total_seconds() / (60*60*24)
 
             if ask_for_update:
-                do_update = raw_input("{} last updated {:.1f} days ago. Refresh? (y/N): ".format(fname, days_since_update))
-                if len(do_update) and do_update[0] == "y":
+                if ask("{} last updated {:.1f} days ago. Refresh?".format(fname, days_since_update), False, True if force_update else None):
                     data = update_function()
                     save_data(data, fname)
+                    if update_info:
+                        update_info.updated = True
             else:
                 print "{} last updated {:.1f} days ago.".format(fname, days_since_update)
     else:
         data = update_function()
         save_data(data, fname)
+        if update_info:
+            update_info.updated = True
+
+    if update_info:
+        update_info.new_size = len(data["data"])
 
     print "{}: {} items".format(fname, len(data["data"]))
     return data
 
 
-def load_cards(ask_for_update=True):
+def load_cards(ask_for_update=True, update_info=None, force_update=False):
     """Load card data"""
-    cards = load_data(consts.cards_fname, get_cards, ask_for_update)
+    cards = load_data(consts.cards_fname, get_cards, ask_for_update, update_info, force_update)
     for i,card in enumerate(cards["data"]):
         cards["data"][i] = Card(card)
     return cards
 
 
-def load_sets(ask_for_update=True):
+def load_sets(ask_for_update=True, update_info=None, force_update=False):
     """Load set data"""
-    sets = load_data(consts.sets_fname, get_sets, ask_for_update)
+    sets = load_data(consts.sets_fname, get_sets, ask_for_update, update_info, force_update)
     for set_code in sets["data"]:
         sets["data"][set_code] = CardSet(sets["data"][set_code])
     return sets
@@ -508,7 +223,7 @@ def get_sets():
     return sets
 
 
-def download_card_images(cards):
+def download_card_images(cards, update_info=None):
     mkdir_if_not_exists(consts.image_download_dir)
 
     existing_images = []
@@ -524,18 +239,22 @@ def download_card_images(cards):
 
     print "{} missing card images will be downloaded.".format(len(missing_images))
     if existing_images:
-        do_update = raw_input("Would you also like to update {} existing card images? [y/N]: ".format(len(existing_images)))
-        if len(do_update) and do_update[0] == "y":
+        if ask("Would you also like to update {} existing card images?".format(len(existing_images)), False):
             download_images += existing_images
             download_images.sort()
+
+    if update_info:
+        update_info.old_size = len(existing_images)
+        update_info.new_size = len(cards["data"])
+        if len(download_images):
+            update_info.updated = True
 
     for i in download_images:
         cards["data"][i].download_image()
 
 
-def build_card_sheets(cards):
-    do_update = raw_input("(Re)build card sheets? [y/N]: ")
-    if not (len(do_update) and do_update[0] == "y"):
+def build_card_sheets(cards, force_update=False):
+    if not ask("(Re)build card sheets?", False, True if force_update else None):
         return
 
     mkdir_if_not_exists(consts.sheets_dir)
@@ -852,18 +571,32 @@ def write_percentage(i, total, prefix=""):
     sys.stdout.flush()
 
 
+def ask(question, default, override=None):
+    y = "Y" if default else "y"
+    n = "n" if default else "N"
+    if override is None:
+        response = raw_input(question + " ({}/{}): ".format(y, n))
+        return len(response) and response[0].lower() == "y"
+    else:
+        print "{} ({}/{}): {} [override]".format(question, y, n, "yes" if override else "no")
+        return override
+
+
 def main():
-    sets = load_sets()
-    cards = load_cards()
+    sets_update = UpdateInfo()
+    sets = load_sets(update_info=sets_update)
+
+    cards = load_cards(force_update=bool(sets_update.diff()))
 
     cards = prune_invalid_cards(cards, sets)
     sets = prune_unused_sets(cards, sets)
     sets = fix_missing_release_dates(sets)
     save_data(sets, "sets2.json")
 
-    download_card_images(cards)
+    images_update = UpdateInfo()
+    download_card_images(cards, images_update)
 
-    build_card_sheets(cards)
+    build_card_sheets(cards, force_update=images_update.diff() or images_update.updated)
     generate_land_html(cards, sets)
 
     placeholders = generate_placeholders(cards, sets)
