@@ -1,13 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #coding: utf-8
-
-from __future__ import division
 
 import requests
 import json
 import time
 import datetime
-import urllib
+import urllib.parse
 import itertools
 import re
 import os
@@ -27,7 +25,6 @@ session = requests.Session()
 class Card (object):
     def __init__(self, raw):
         self.raw = raw
-        self.raw["collector_number"] = self.raw["collector_number"].encode("utf-8")
 
 
     def __getattr__(self, attr):
@@ -49,7 +46,7 @@ class Card (object):
     def download_image(self):
         url = self.image_uris["normal"]
         fname = os.path.join(consts.image_download_dir, self.image_fname())
-        print "{} -> {}".format(url, fname)
+        print("{} -> {}".format(url, fname))
 
         with session.get(url, stream=True) as r:
             with open(fname, "wb") as f:
@@ -116,7 +113,7 @@ def load_data(fname, update_function, ask_for_update, update_info=None, force_up
                     if update_info:
                         update_info.updated = True
             else:
-                print "{} last updated {:.1f} days ago.".format(fname, days_since_update)
+                print("{} last updated {:.1f} days ago.".format(fname, days_since_update))
     else:
         data = update_function()
         save_data(data, fname)
@@ -126,7 +123,7 @@ def load_data(fname, update_function, ask_for_update, update_info=None, force_up
     if update_info:
         update_info.new_size = len(data["data"])
 
-    print "{}: {} items".format(fname, len(data["data"]))
+    print("{}: {} items".format(fname, len(data["data"])))
     return data
 
 
@@ -149,12 +146,12 @@ def load_sets(ask_for_update=True, update_info=None, force_update=False):
 def save_data(data, fname):
     with open(fname, "w") as f:
         json.dump(data, f, sort_keys=True, indent=2, default=lambda x: x.raw)
-    print "Saved data to {}".format(fname)
+    print("Saved data to {}".format(fname))
 
 
 def get_cards():
     """Download card data"""
-    params = "?" + urllib.urlencode({"q": consts.card_query, "order": "released"})
+    params = "?" + urllib.parse.urlencode({"q": consts.card_query, "order": "released"})
     next_page = consts.api_root + consts.search_endpoint + params
     total_cards = None
 
@@ -165,7 +162,7 @@ def get_cards():
 
     page = 1
     while True:
-        print "Getting cards page {}".format(page)
+        print("Getting cards page {}".format(page))
         r = session.get(next_page)
         j = json.loads(r.text)
 
@@ -193,7 +190,7 @@ def get_cards():
 
 def get_sets():
     """Download set data"""
-    print "Getting sets"
+    print("Getting sets")
     next_page = consts.api_root + consts.sets_endpoint
 
     sets = {
@@ -237,7 +234,7 @@ def download_card_images(cards, update_info=None):
 
     download_images = missing_images
 
-    print "{} missing card images will be downloaded.".format(len(missing_images))
+    print("{} missing card images will be downloaded.".format(len(missing_images)))
     if existing_images:
         if ask("Would you also like to update {} existing card images?".format(len(existing_images)), False):
             download_images += existing_images
@@ -272,7 +269,7 @@ def build_card_sheets(cards, force_update=False):
 
     with open(consts.cards_css_fname, "w") as f:
         for color in consts.colors:
-            print "{}...".format(color)
+            print("{}...".format(color))
 
             sheet_fname = os.path.join(consts.sheets_dir, color + ".jpg")
 
@@ -285,9 +282,9 @@ def build_card_sheets(cards, force_update=False):
             sheet_width_px = sheet_width * card_width
             sheet_height_px = sheet_height * card_height
 
-            print "\t{} total cards".format(num_cards)
-            print "\t{}x{} cards".format(sheet_width, sheet_height)
-            print "\t{}x{} pixels".format(sheet_width_px, sheet_height_px)
+            print("\t{} total cards".format(num_cards))
+            print("\t{}x{} cards".format(sheet_width, sheet_height))
+            print("\t{}x{} pixels".format(sheet_width_px, sheet_height_px))
 
             f.write(consts.sheet_css.sheet.format(color=color.lower(), width=sheet_width_px, height=sheet_height_px))
 
@@ -317,7 +314,7 @@ def build_card_sheets(cards, force_update=False):
 
 
 def generate_land_html(cards, sets):
-    print "Assembling land.html"
+    print("Assembling land.html")
 
     organized_cards = cards_by_set_and_color(cards)
 
@@ -353,7 +350,7 @@ def generate_land_html(cards, sets):
     with open("land.html", "w") as f:
         f.write(html)
 
-    print "Processed", total
+    print("Processed", total)
 
 
 def generate_placeholders(cards, sets):
@@ -437,12 +434,12 @@ def prune_invalid_cards(cards, sets):
 
     for card in cards["data"]:
         if card.set in inv:
-            print "{} {} #{}".format(card.set, card.name, card.collector_number)
+            print("{} {} #{}".format(card.set, card.name, card.collector_number))
 
     count_before = len(cards["data"])
-    cards["data"][:] = itertools.ifilter(lambda c: c.set not in inv, cards["data"])
+    cards["data"][:] = filter(lambda c: c.set not in inv, cards["data"])
     if len(cards["data"]) != count_before:
-        print "WARNING: {} invalid cards were detected and removed from the card list".format(count_before - len(cards["data"]))
+        print("WARNING: {} invalid cards were detected and removed from the card list".format(count_before - len(cards["data"])))
 
     return cards
 
@@ -461,7 +458,7 @@ def prune_unused_sets(cards, sets):
     for set_code in to_delete:
         del sets["data"][set_code]
 
-    print "Pruned {} unused sets".format(count_before - len(sets["data"]))
+    print("Pruned {} unused sets".format(count_before - len(sets["data"])))
 
     return sets
 
@@ -473,9 +470,9 @@ def fix_missing_release_dates(sets):
             if set_code in consts.missing_release_dates:
                 sets["data"][set_code].raw["released_at"] = consts.missing_release_dates[set_code]
             else:
-                print "WARNING: Set '{}' has no release date and is not in missing_release_dates".format(set_code)
+                print("WARNING: Set '{}' has no release date and is not in missing_release_dates".format(set_code))
         elif set_code in consts.missing_release_dates:
-            print "WARNING: Set '{}' has a release date ({}) and is in missing_release_dates ({})".format(set_code, sets["data"][set_code].released_at, consts.missing_release_dates[set_code])
+            print("WARNING: Set '{}' has a release date ({}) and is in missing_release_dates ({})".format(set_code, sets["data"][set_code].released_at, consts.missing_release_dates[set_code]))
 
     return sets
 
@@ -529,8 +526,12 @@ def set_order(sets, group=None):
         s.code
         for s
         in sorted(
-            sets["data"].values(),
-            key=lambda x: x.released_at,
+            list(sets["data"].values()),
+            key=lambda x: (
+                x.released_at,
+                consts.dda_order_fix[x.code] if x.code in consts.dda_order_fix else 0,
+                x.code
+            ),
             reverse=True
         )
         if (consts.set_type_to_group[s.set_type] == group or group is None)
@@ -541,7 +542,7 @@ def print_warnings(data, page):
     """Print any warnings that may exist in a Scryfall list response"""
     if "warnings" in data:
         for w in data["warnings"]:
-            print "WARNING (page {}): {}".format(page, w)
+            print("WARNING (page {}): {}".format(page, w))
 
 
 def parse_time(time_string):
@@ -575,10 +576,10 @@ def ask(question, default, override=None):
     y = "Y" if default else "y"
     n = "n" if default else "N"
     if override is None:
-        response = raw_input(question + " ({}/{}): ".format(y, n))
+        response = input(question + " ({}/{}): ".format(y, n))
         return len(response) and response[0].lower() == "y"
     else:
-        print "{} ({}/{}): {} [override]".format(question, y, n, "yes" if override else "no")
+        print("{} ({}/{}): {} [override]".format(question, y, n, "yes" if override else "no"))
         return override
 
 

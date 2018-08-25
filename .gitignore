@@ -1,8 +1,12 @@
+env/
 *.pyc
 *.json
 *.txt
 *.odt
 *.xcf
+*.dot
+*.png
+*.bak
 images_dl/
 v1/
 !v1_to_v2_translations.json

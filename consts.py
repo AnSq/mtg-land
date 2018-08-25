@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #coding: utf-8
 
 class Consts (object):
@@ -103,6 +103,12 @@ set_symbol_translation = {
     "pss2"  : "pmei",
     "pss3"  : "pmei",
     "sum"   : "psum",
+}
+dda_order_fix = {
+    "evg" : 1,
+    "jvc" : 2,
+    "dvd" : 3,
+    "gvl" : 4
 }
 name_to_color = {
     "Plains"   : "W",
