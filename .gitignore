@@ -1,4 +1,5 @@
 env/
+.pylintrc
 *.pyc
 *.json
 *.txt

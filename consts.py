@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #coding: utf-8
 
-class Consts (object):
+class Consts:
     """a plain object to store some stuff"""
     pass
 
@@ -30,9 +30,7 @@ ignored_card_fields = (
     "cmc",
     "color_identity",
     "colors",
-    "colorshifted",
     "digital",
-    "futureshifted",
     "lang",
     "layout",
     "legalities",
@@ -48,34 +46,18 @@ ignored_card_fields = (
     "reprint",
     "reserved",
     "rulings_uri",
-    "set_search_uri",
-    "timeshifted"
+    "set_search_uri"
 )
 ignored_set_fields = (
     "object",
     "search_uri"
 )
 missing_release_dates = {
-    "cst":   "2006-07-21",
-    "j14":   "2014-08-00",
-    "pal00": "2000-00-00",
-    "pal01": "2001-00-00",
-    "pal02": "2002-00-00",
-    "pal03": "2003-00-00",
-    "pal04": "2004-00-00",
-    "pal05": "2005-00-00",
-    "pal06": "2006-00-00",
-    "pal99": "1999-00-00",
-    "palp":  "1998-09-00",
-    "parl":  "1996-00-00",
-    "pdgm":  "2013-04-27",
-    "pelp":  "2000-02-05",
-    "pgp17": "2017-10-00",
+    "pgp17": "2017-10-00"
+}
+corrected_release_dates = {
+    "j14":   "2014-08-04",
     "pgpx":  "2018-00-00",
-    "pgru":  "1999-07-12",
-    "phuk":  "2006-00-00",
-    "pss2":  "2017-09-29",
-    "pss3":  "2018-07-13"
 }
 set_symbol_translation = {
     "cst"   : "ice",

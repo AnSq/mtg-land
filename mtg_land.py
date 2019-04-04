@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 #coding: utf-8
 
-import requests
 import json
 import time
 import datetime
@@ -11,18 +10,18 @@ import re
 import os
 import sys
 import math
+
+import requests
 from PIL import Image
 
 import consts
-
-from pprint import pprint as pp
 
 
 session = requests.Session()
 
 
 
-class Card (object):
+class Card:
     def __init__(self, raw):
         self.raw = raw
 
@@ -55,7 +54,7 @@ class Card (object):
 
 
 
-class CardSet (object):
+class CardSet:
     def __init__(self, raw):
         self.raw = raw
 
@@ -73,7 +72,7 @@ class CardSet (object):
 
 
 
-class UpdateInfo (object):
+class UpdateInfo:
     def __init__(self):
         self.old_size = 0
         self.new_size = 0
@@ -463,16 +462,23 @@ def prune_unused_sets(cards, sets):
     return sets
 
 
-def fix_missing_release_dates(sets):
-    """Modifies the input param to add release dates to sets that are missing them"""
+def fix_release_dates(sets):
+    """Modifies the input param to add release dates to sets that are missing them and correct release dates that are wrong"""
     for set_code in sets["data"]:
         if "released_at" not in sets["data"][set_code].raw:
             if set_code in consts.missing_release_dates:
                 sets["data"][set_code].raw["released_at"] = consts.missing_release_dates[set_code]
             else:
                 print("WARNING: Set '{}' has no release date and is not in missing_release_dates".format(set_code))
-        elif set_code in consts.missing_release_dates:
-            print("WARNING: Set '{}' has a release date ({}) and is in missing_release_dates ({})".format(set_code, sets["data"][set_code].released_at, consts.missing_release_dates[set_code]))
+        else:
+            if set_code in consts.missing_release_dates:
+                print("WARNING: Set '{}' has a release date ({}) and is in missing_release_dates ({}). missing_release_dates will be ignored.".format(set_code, sets["data"][set_code].released_at, consts.missing_release_dates[set_code]))
+            elif set_code in consts.corrected_release_dates:
+                if sets["data"][set_code].released_at == consts.corrected_release_dates[set_code]:
+                    print("INFO: Release date for set '{}' matches its corrected_release_dates ({})".format(set_code, sets["data"][set_code].released_at))
+                else:
+                    print("Using release date {} instead of {} for set '{}'".format(consts.corrected_release_dates[set_code], sets["data"][set_code].released_at, set_code))
+                    sets["data"][set_code].released_at = consts.corrected_release_dates[set_code]
 
     return sets
 
@@ -591,7 +597,7 @@ def main():
 
     cards = prune_invalid_cards(cards, sets)
     sets = prune_unused_sets(cards, sets)
-    sets = fix_missing_release_dates(sets)
+    sets = fix_release_dates(sets)
     save_data(sets, "sets2.json")
 
     images_update = UpdateInfo()
