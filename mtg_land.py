@@ -219,6 +219,28 @@ def get_sets():
     return sets
 
 
+def show_new_sets(sets):
+    old_used_sets = set()
+    if os.path.isfile(consts.used_sets_fname):
+        with open(consts.used_sets_fname) as f:
+            old_used_sets = set([tuple(x) for x in json.load(f)])
+
+    used_sets = set([(s,sets["data"][s].released_at) for s in sets["data"]])
+    new_used_sets = used_sets - old_used_sets
+    new_set_codes = [caps_set_code(x[0]) for x in sorted(list(new_used_sets), key=lambda x: x[1], reverse=True)]
+
+    if new_set_codes:
+        print("New sets found: {}".format(", ".join(new_set_codes)))
+    else:
+        print("No new sets found.")
+
+    save_data(list(used_sets), consts.used_sets_fname)
+    with open(consts.new_sets_fname, "w") as f:
+        for s in new_set_codes:
+            f.write(s + "\n")
+
+
+
 def download_card_images(cards, update_info=None):
     mkdir_if_not_exists(consts.image_download_dir)
 
@@ -235,7 +257,7 @@ def download_card_images(cards, update_info=None):
 
     print("{} missing card images will be downloaded.".format(len(missing_images)))
     if existing_images:
-        if ask("Would you also like to update {} existing card images?".format(len(existing_images)), False):
+        if ask("Would you also like to redownload {} existing card images?".format(len(existing_images)), False):
             download_images += existing_images
             download_images.sort()
 
@@ -599,6 +621,8 @@ def main():
     sets = prune_unused_sets(cards, sets)
     sets = fix_release_dates(sets)
     save_data(sets, "sets2.json")
+
+    show_new_sets(sets)
 
     images_update = UpdateInfo()
     download_card_images(cards, images_update)

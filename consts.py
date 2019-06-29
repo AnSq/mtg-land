@@ -14,6 +14,8 @@ sets_endpoint = "/sets"
 
 cards_fname = "cards.json"
 sets_fname = "sets.json"
+used_sets_fname = "used_sets.json"
+new_sets_fname = "new_sets.txt"
 image_download_dir = "images_dl"
 sheets_dir = "card_sheets"
 cards_css_fname = "cards.css"

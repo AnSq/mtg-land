@@ -1,8 +1,8 @@
 .card.color_w .img {background-size: 2800px 3900px;}
 .card.color_u .img {background-size: 2800px 3900px;}
 .card.color_b .img {background-size: 2940px 4095px;}
-.card.color_r .img {background-size: 2940px 3900px;}
-.card.color_g .img {background-size: 2940px 3900px;}
+.card.color_r .img {background-size: 2940px 4095px;}
+.card.color_g .img {background-size: 2940px 4095px;}
 .card.color_c .img {background-size: 420px 390px;}
 #W_LEA_286 + label > .img {background-position: -140px -0px;}
 #W_LEA_287 + label > .img {background-position: -280px -0px;}
@@ -388,7 +388,14 @@
 #W_pRW2_B1 + label > .img {background-position: -280px -3705px;}
 #W_pRW2_B3 + label > .img {background-position: -420px -3705px;}
 #W_WAR_250 + label > .img {background-position: -560px -3705px;}
-#W_WAR_252 + label > .img {background-position: -700px -3705px;}
+#W_WAR_251 + label > .img {background-position: -700px -3705px;}
+#W_WAR_252 + label > .img {background-position: -840px -3705px;}
+#W_MH1_250 + label > .img {background-position: -980px -3705px;}
+#W_M20_261 + label > .img {background-position: -1120px -3705px;}
+#W_M20_262 + label > .img {background-position: -1260px -3705px;}
+#W_M20_263 + label > .img {background-position: -1400px -3705px;}
+#W_M20_264 + label > .img {background-position: -1540px -3705px;}
+#W_pPP1_1 + label > .img {background-position: -1680px -3705px;}
 #U_LEA_288 + label > .img {background-position: -140px -0px;}
 #U_LEA_289 + label > .img {background-position: -280px -0px;}
 #U_LEB_291 + label > .img {background-position: -420px -0px;}
@@ -775,6 +782,13 @@
 #U_pRW2_B10 + label > .img {background-position: -560px -3705px;}
 #U_WAR_253 + label > .img {background-position: -700px -3705px;}
 #U_WAR_254 + label > .img {background-position: -840px -3705px;}
+#U_WAR_255 + label > .img {background-position: -980px -3705px;}
+#U_MH1_251 + label > .img {background-position: -1120px -3705px;}
+#U_M20_265 + label > .img {background-position: -1260px -3705px;}
+#U_M20_266 + label > .img {background-position: -1400px -3705px;}
+#U_M20_267 + label > .img {background-position: -1540px -3705px;}
+#U_M20_268 + label > .img {background-position: -1680px -3705px;}
+#U_pPP1_2 + label > .img {background-position: -1820px -3705px;}
 #B_LEA_290 + label > .img {background-position: -140px -0px;}
 #B_LEA_291 + label > .img {background-position: -280px -0px;}
 #B_LEB_294 + label > .img {background-position: -420px -0px;}
@@ -1200,7 +1214,14 @@
 #B_pRW2_B4 + label > .img {background-position: -420px -3900px;}
 #B_pRW2_B5 + label > .img {background-position: -560px -3900px;}
 #B_WAR_256 + label > .img {background-position: -700px -3900px;}
-#B_WAR_258 + label > .img {background-position: -840px -3900px;}
+#B_WAR_257 + label > .img {background-position: -840px -3900px;}
+#B_WAR_258 + label > .img {background-position: -980px -3900px;}
+#B_MH1_252 + label > .img {background-position: -1120px -3900px;}
+#B_M20_269 + label > .img {background-position: -1260px -3900px;}
+#B_M20_270 + label > .img {background-position: -1400px -3900px;}
+#B_M20_271 + label > .img {background-position: -1540px -3900px;}
+#B_M20_272 + label > .img {background-position: -1680px -3900px;}
+#B_pPP1_3 + label > .img {background-position: -1820px -3900px;}
 #R_LEA_292 + label > .img {background-position: -140px -0px;}
 #R_LEA_293 + label > .img {background-position: -280px -0px;}
 #R_LEB_297 + label > .img {background-position: -420px -0px;}
@@ -1614,8 +1635,15 @@
 #R_GK2_105 + label > .img {background-position: -1680px -3705px;}
 #R_pRW2_B6 + label > .img {background-position: -1820px -3705px;}
 #R_pRW2_B7 + label > .img {background-position: -1960px -3705px;}
-#R_WAR_260 + label > .img {background-position: -2100px -3705px;}
-#R_WAR_261 + label > .img {background-position: -2240px -3705px;}
+#R_WAR_259 + label > .img {background-position: -2100px -3705px;}
+#R_WAR_260 + label > .img {background-position: -2240px -3705px;}
+#R_WAR_261 + label > .img {background-position: -2380px -3705px;}
+#R_MH1_253 + label > .img {background-position: -2520px -3705px;}
+#R_M20_273 + label > .img {background-position: -2660px -3705px;}
+#R_M20_274 + label > .img {background-position: -2800px -3705px;}
+#R_M20_275 + label > .img {background-position: -0px -3900px;}
+#R_M20_276 + label > .img {background-position: -140px -3900px;}
+#R_pPP1_4 + label > .img {background-position: -280px -3900px;}
 #G_LEA_294 + label > .img {background-position: -140px -0px;}
 #G_LEA_295 + label > .img {background-position: -280px -0px;}
 #G_LEB_300 + label > .img {background-position: -420px -0px;}
@@ -2029,7 +2057,14 @@
 #G_pRW2_B8 + label > .img {background-position: -1680px -3705px;}
 #G_pRW2_B9 + label > .img {background-position: -1820px -3705px;}
 #G_WAR_262 + label > .img {background-position: -1960px -3705px;}
-#G_WAR_264 + label > .img {background-position: -2100px -3705px;}
+#G_WAR_263 + label > .img {background-position: -2100px -3705px;}
+#G_WAR_264 + label > .img {background-position: -2240px -3705px;}
+#G_MH1_254 + label > .img {background-position: -2380px -3705px;}
+#G_M20_277 + label > .img {background-position: -2520px -3705px;}
+#G_M20_278 + label > .img {background-position: -2660px -3705px;}
+#G_M20_279 + label > .img {background-position: -2800px -3705px;}
+#G_M20_280 + label > .img {background-position: -0px -3900px;}
+#G_pPP1_5 + label > .img {background-position: -140px -3900px;}
 #C_OGW_183 + label > .img {background-position: -140px -0px;}
 #C_OGW_183a + label > .img {background-position: -280px -0px;}
 #C_OGW_184 + label > .img {background-position: -0px -195px;}
