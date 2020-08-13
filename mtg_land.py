@@ -45,13 +45,12 @@ class Card:
     def download_image(self):
         url = self.image_uris["normal"]
         fname = os.path.join(consts.image_download_dir, self.image_fname())
-        print("{} -> {}".format(url, fname))
+        print("{} -> {}".format(url, fname.encode("utf-8")))
 
         with session.get(url, stream=True) as r:
             with open(fname, "wb") as f:
                 for chunk in r.iter_content(chunk_size=1024):
                     f.write(chunk)
-
 
 
 class CardSet:
@@ -288,7 +287,7 @@ def build_card_sheets(cards, force_update=False):
 
     coords = []
 
-    with open(consts.cards_css_fname, "w") as f:
+    with open(consts.cards_css_fname, "w", encoding="utf-8") as f:
         for color in consts.colors:
             print("{}...".format(color))
 
@@ -368,7 +367,7 @@ def generate_land_html(cards, sets):
 
     html = consts.land_html.header.format(toc=toc.strip()) + body + consts.land_html.footer
 
-    with open("land.html", "w") as f:
+    with open("land.html", "w", encoding="utf-8") as f:
         f.write(html)
 
     print("Processed", total)
@@ -434,7 +433,7 @@ def generate_placeholders_html(placeholders):
 
     html = consts.placeholder_html.header + form + body + consts.placeholder_html.footer
 
-    with open(consts.placeholders_html_fname, "w") as f:
+    with open(consts.placeholders_html_fname, "w", encoding="utf-8") as f:
         f.write(html)
 
 

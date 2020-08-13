@@ -25,8 +25,9 @@ scaled_width = 140
 jpeg_quality = 85
 sheet_background_color = (0, 0, 0)
 
-card_query = "t:basic in:paper unique:prints lang:en -is:digital -s:CED -s:CEI -s:PTC -border:gold -s:RQS"
+card_query = "t:basic in:paper unique:prints lang:en -is:digital -s:CED -s:CEI -s:PTC -border:gold -s:RQS -t:cloud"
 # RQS lands are indistinguishable from 4th edition
+# t:cloud is Barry's Land, a special case that I haven't dealt with yet
 
 ignored_card_fields = (
     "cmc",
@@ -81,11 +82,15 @@ set_symbol_translation = {
     "parl"  : "pmtg1",
     "pdgm"  : "dgm",
     "pelp"  : "peuro",
+    "pf19"  : "pmei",
+    "pf20"  : "pmei",
     "pgp17" : "pmei",
     "pgpx"  : "pmei",
     "phuk"  : "psalvat05",
+    "ppp1"  : "pmei",
     "pss2"  : "pmei",
     "pss3"  : "pmei",
+    "sld"   : "pmei",
     "sum"   : "psum",
 }
 dda_order_fix = {
@@ -122,6 +127,7 @@ set_type_to_group = {
     "box"              : "other",
     "starter"          : "other",
     "premium_deck"     : "other",
+    "masters"          : "other",
     "funny"            : "un_set",
     "promo"            : "promo",
     "duel_deck"        : "duel_deck",
